@@ -1,6 +1,8 @@
-import Splash from './scenes/Splash';
+import Loading from './scenes/Loading';
 import Play from './scenes/Play';
+// import Loading from './scenes/Loading2';
 import { Container } from 'pixi.js';
+import Tutorial from './scenes/Tutorial';
 
 /**
  * Main game stage, manages scenes/levels.
@@ -8,15 +10,14 @@ import { Container } from 'pixi.js';
  * @extends {PIXI.Container}
  */
 export default class Game extends Container {
-
   static get events() {
     return {
-      SWITCH_SCENE: 'switch_scene'
+      SWITCH_SCENE: 'switch_scene',
     };
   }
 
   /**
-   * @param {PIXI.Sprite} background 
+   * @param {PIXI.Sprite} background
    */
   constructor({ background } = {}) {
     super();
@@ -26,15 +27,15 @@ export default class Game extends Container {
   }
 
   async start() {
-    await this.switchScene(Splash, { scene: 'splash' });
+    await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
 
-    this.switchScene(Play, { scene: 'play' });
+    // this.switchScene(Tutorial, { scene: 'tutorial' });
   }
 
   /**
-   * @param {Function} constructor 
-   * @param {String} scene 
+   * @param {Function} constructor
+   * @param {String} scene
    */
   switchScene(constructor, scene) {
     this.removeChild(this.currentScene);

@@ -1,14 +1,22 @@
 import { Sprite } from 'pixi.js';
 import Scene from './Scene';
+import Play from './Play';
+import Game from '../Game';
 import gsap from 'gsap';
 import Footer from '../components/Footer';
 
-export default class Play extends Scene {
+export default class Loading extends Scene {
+  constructor() {
+    super();
+  }
   async onCreated() {
     const footer = new Footer();
+    this.game = Game;
+    // this.parent.switchScene(Play, { scene: 'play' });
     footer.x = -window.innerWidth / 2;
     footer.y = window.innerHeight / 2 - footer.height;
-    // this.addChild(footer);
+    this.addChild(footer);
+    console.log();
   }
 
   /**
@@ -20,5 +28,9 @@ export default class Play extends Scene {
    */
   onResize(width, height) {
     // eslint-disable-line no-unused-vars
+  }
+  onLoadProgress(val) {
+    console.log(val);
+    // console.log(this.background);
   }
 }

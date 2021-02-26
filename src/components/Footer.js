@@ -51,6 +51,6 @@ export default class Footer extends Container {
     logo.interactive = true;
     logo.buttonMode = true;
 
-    logo.on('pointerdown', () => window.location = 'https://www.booost.bg/');
+    logo.on('pointerdown', () => (window.location = 'https://www.booost.bg/'));
   }
 }
