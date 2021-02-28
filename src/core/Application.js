@@ -104,9 +104,6 @@ export default class GameApplication extends Application {
     this.background = sprite;
     this.background.anchor.set(0.5);
     this.background.name = 'background';
-    //set window size
-    this.background.width = window.innerWidth;
-    this.background.height = window.innerHeight;
 
     this.stage.addChildAt(sprite);
   }

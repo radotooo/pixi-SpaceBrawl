@@ -30,7 +30,7 @@ export default class Game extends Container {
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
 
-    // this.switchScene(Tutorial, { scene: 'tutorial' });
+    this.switchScene(Tutorial, { scene: 'tutorial' });
   }
 
   /**

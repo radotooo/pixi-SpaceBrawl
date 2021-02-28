@@ -5,20 +5,20 @@ import { Container, Sprite } from 'pixi.js';
  * @class
  */
 export default class Logo extends Container {
-  constructor() {
+  /**
+   * Logo sprite texture
+   * @param {PIXI.Texture} texture
+   */
+  constructor(texture) {
     super();
-    this._init();
-  }
-
-  _init() {
-    this._addLogo();
+    this._createLogo(texture);
   }
 
   /**
    * @private
    */
-  _addLogo() {
-    const logo = new Sprite.from('ooo');
+  _createLogo(texture) {
+    const logo = new Sprite.from(texture);
     logo.anchor.set(0.5);
     this._logo = logo;
     this.addChild(this._logo);
