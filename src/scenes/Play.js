@@ -1,6 +1,4 @@
-import { Sprite } from 'pixi.js';
 import Scene from './Scene';
-import gsap from 'gsap';
 import Footer from '../components/Footer';
 
 export default class Play extends Scene {

@@ -7,7 +7,7 @@ export default class InfoBar extends Container {
    * @param {Number} width The bar width size
    * @param {Number} height The bar heigth size
    */
-  constructor(text, width, height) {
+  constructor(width, height, text = '') {
     super();
     this._initaltext = text;
     this._width = width;
@@ -23,7 +23,9 @@ export default class InfoBar extends Container {
 
     this._init();
   }
-
+  /**
+   * @private
+   */
   _init() {
     this._createBar();
     this.addChild(this._bar);
@@ -34,7 +36,7 @@ export default class InfoBar extends Container {
   _createBar() {
     const bar = new Bar(this._width, this._height);
     this._bar = bar;
-    const text = new Text(this._initaltext, {
+    const text = new Text('', {
       fill: '0xffffff',
       fontFamily: 'Ubuntu',
       fontSize: 16,
@@ -51,7 +53,7 @@ export default class InfoBar extends Container {
    * Change bar text value
    * @param {String} text
    */
-  update(text) {
+  setText(text) {
     this._text.text = text;
   }
 }

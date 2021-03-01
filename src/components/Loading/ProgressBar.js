@@ -10,11 +10,17 @@ import gsap from 'gsap';
 export default class ProgressBar extends Container {
   constructor() {
     super();
+    /**
+     * @private
+     * @type {PIXI.Graphics}
+     */
     this._bar = new Bar(550, 55);
 
     this._init();
   }
-
+  /**
+   * @private
+   */
   _init() {
     gsap.registerPlugin(PixiPlugin);
     this._createProgressBar();

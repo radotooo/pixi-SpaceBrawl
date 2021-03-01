@@ -24,17 +24,29 @@ export default {
       hideDelay: 1800,
     },
     Tutorial: {
-      Keys: {
+      slides: {
         arrowUp: {
+          img: 'keyDefault',
           description: 'Press the "Up arrow" key to move the shield up',
-          angle: 270,
+          hasCap: true,
+          cap: {
+            img: 'arrow',
+            angle: 270,
+          },
         },
         arrowDown: {
+          img: 'keyDefault',
           description: 'Press the "Down arrow" key to move the shield down',
-          angle: 90,
+          hasCap: true,
+          cap: {
+            img: 'arrow',
+            angle: 90,
+          },
         },
         space: {
+          img: 'keyLong',
           description: 'Press the "Space" key to shoot',
+          hasCap: false,
         },
       },
     },
