@@ -129,7 +129,7 @@ export default class Tutorial extends Scene {
     this._animationIsPlaying = true;
     await gsap.to(this._slides[this._activeSlideIndex], {
       alpha: 0,
-      duration: 0.2,
+      duration: 0.1,
     });
     this._animationIsPlaying = false;
   }
@@ -141,7 +141,7 @@ export default class Tutorial extends Scene {
     this._animationIsPlaying = true;
     await gsap.to(this._slides[this._activeSlideIndex], {
       alpha: 1,
-      duration: 0.2,
+      duration: 0.1,
     });
     this._animationIsPlaying = false;
   }

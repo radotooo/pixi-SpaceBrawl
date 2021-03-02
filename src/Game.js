@@ -1,8 +1,10 @@
 import Loading from './scenes/Loading';
+import Countdown from './scenes/Countdown';
 import Play from './scenes/Play';
 // import Loading from './scenes/Loading2';
 import { Container } from 'pixi.js';
 import Tutorial from './scenes/Tutorial';
+import Logo from './components/Loading/Logo';
 
 /**
  * Main game stage, manages scenes/levels.
@@ -27,12 +29,19 @@ export default class Game extends Container {
   }
 
   async start() {
+    // await this.switchScene(Countdown, { scene: 'countdown' });
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
-    this.switchScene(Tutorial, { scene: 'tutorial' });
-    this.currentScene.on(Tutorial.events.TUTORIAL_DONE, () =>
-      console.log('done')
-    );
+    await this.switchScene(Play, { scene: 'play' });
+    // this.switchScene(Tutorial, { scene: 'tutorial' });
+
+    // this.currentScene.on(Tutorial.events.TUTORIAL_DONE, () => {
+    //   this.switchScene(Countdown, { scene: 'countdown' });
+    //   this.currentScene.on('radoto', () => {
+    //     this.switchScene(Loading, { scene: 'loading' });
+    //     console.log(this.currentScene);
+    //   });
+    // });
   }
 
   /**
