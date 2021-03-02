@@ -26,7 +26,14 @@ export default {
     Tutorial: {
       slides: {
         arrowUp: {
-          img: 'keyDefault',
+          onFocus: true,
+          img: {
+            assert: 'keyDefault',
+            x: 0,
+            y: -220,
+            scaleY: 1,
+            scaleX: 1,
+          },
           description: 'Press the "Up arrow" key to move the shield up',
           hasCap: true,
           cap: {
@@ -35,7 +42,14 @@ export default {
           },
         },
         arrowDown: {
-          img: 'keyDefault',
+          onFocus: false,
+          img: {
+            assert: 'keyDefault',
+            x: 0,
+            y: -220,
+            scaleY: 1,
+            scaleX: 1,
+          },
           description: 'Press the "Down arrow" key to move the shield down',
           hasCap: true,
           cap: {
@@ -44,10 +58,20 @@ export default {
           },
         },
         space: {
-          img: 'keyLong',
+          onFocus: false,
+          img: {
+            assert: 'keyLong',
+            x: 0,
+            y: -115,
+            scaleY: 1,
+            scaleX: 1,
+          },
           description: 'Press the "Space" key to shoot',
           hasCap: false,
         },
+      },
+      infoDots: {
+        gap: 20,
       },
     },
   },

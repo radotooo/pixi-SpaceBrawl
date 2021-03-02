@@ -1,8 +1,8 @@
 import gsap from 'gsap/all';
 import { filters } from 'pixi.js';
 import config from '../config';
+import { fit } from '../core/utils';
 
-import InfoBar from '../components/Tutorial/InfoBar';
 import Button from '../components/Button';
 import Scene from './Scene';
 import Slide from '../components/Tutorial/Slide';
@@ -24,7 +24,7 @@ export default class Tutorial extends Scene {
      * @type {Array}
      * @private
      */
-    this._tutorialSlides = [];
+    this._slides = [];
     /**
      * @type {Number}
      * @private
@@ -39,14 +39,11 @@ export default class Tutorial extends Scene {
   static get events() {
     return EVENTS;
   }
+
   async onCreated() {
-    this._createDescriptionBar();
-    this._createSlide(this._config.slides.arrowUp);
-    this._createSlide(this._config.slides.arrowDown);
-    this._createSlide(this._config.slides.space);
-    this._createIndicatorDots(3, 20);
+    this._createSlides();
+    this._createIndicatorDots(this._slides.length, this._config.infoDots.gap);
     this._createButton('NEXT', 210, 60);
-    this._setInitialValues();
     // this._setBackgroundBlur();
     this._addListeners();
   }
@@ -54,23 +51,13 @@ export default class Tutorial extends Scene {
   /**
    * @private
    */
-  _setInitialValues() {
-    const currentSlide = this._tutorialSlides[this._activeSlideIndex];
-    this._infoBar.setText(currentSlide.description);
-    currentSlide.alpha = 1;
+  _createSlides() {
+    const arrowUp = new Slide(this._config.slides.arrowUp);
+    const arrowDown = new Slide(this._config.slides.arrowDown);
+    const space = new Slide(this._config.slides.space);
+    this.addChild(arrowUp, arrowDown, space);
+    this._slides.push(arrowUp, arrowDown, space);
   }
-
-  /**
-   * @private
-   */
-  _createSlide(config) {
-    const key = new Slide(config);
-    key.y = -key.height / 2;
-    key.alpha = 0;
-    this._tutorialSlides.push(key);
-    this.addChild(key);
-  }
-
   /**
    * @private
    */
@@ -79,7 +66,7 @@ export default class Tutorial extends Scene {
 
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
-    button.y = this.height / 2 + 45;
+    button.y = 300;
     this._button = button;
     this._button.buttonMode = true;
     this._button.interactive = true;
@@ -94,20 +81,9 @@ export default class Tutorial extends Scene {
 
     indicatorDotSet.pivot.x = indicatorDotSet.width / 2;
     indicatorDotSet.pivot.y = indicatorDotSet.height / 2;
-    indicatorDotSet.y = this.height / 2 - 100;
+    indicatorDotSet.y = 120;
     this._indicatorDotSet = indicatorDotSet;
     this.addChild(this._indicatorDotSet);
-  }
-  /**
-   * @private
-   */
-  _createDescriptionBar() {
-    const bar = new InfoBar(450, 50);
-
-    bar.x = -this.width / 2 - bar.width / 2;
-    bar.y = this.height / 2 + bar.height / 2;
-    this._infoBar = bar;
-    this.addChild(this._infoBar);
   }
   /**
    * Set background blur effect
@@ -135,7 +111,7 @@ export default class Tutorial extends Scene {
    * @private
    */
   async _changeActiveSlide() {
-    if (this._activeSlideIndex >= this._tutorialSlides.length - 1) {
+    if (this._activeSlideIndex >= this._slides.length - 1) {
       this.emit(Tutorial.events.TUTORIAL_DONE);
 
       return;
@@ -151,20 +127,10 @@ export default class Tutorial extends Scene {
    */
   async _hideCurrentSlide() {
     this._animationIsPlaying = true;
-    const tl = new gsap.timeline();
-    await tl
-      .to(this._tutorialSlides[this._activeSlideIndex], {
-        alpha: 0,
-        duration: 0.2,
-      })
-      .to(
-        this._infoBar,
-        {
-          alpha: 0,
-          duration: 0.2,
-        },
-        '<'
-      );
+    await gsap.to(this._slides[this._activeSlideIndex], {
+      alpha: 0,
+      duration: 0.2,
+    });
     this._animationIsPlaying = false;
   }
 
@@ -173,23 +139,10 @@ export default class Tutorial extends Scene {
    */
   async _showNextSlide() {
     this._animationIsPlaying = true;
-    const tl = new gsap.timeline();
-    this._infoBar.setText(
-      this._tutorialSlides[this._activeSlideIndex].description
-    );
-    await tl
-      .to(this._tutorialSlides[this._activeSlideIndex], {
-        alpha: 1,
-        duration: 0.2,
-      })
-      .to(
-        this._infoBar,
-        {
-          alpha: 1,
-          duration: 0.2,
-        },
-        '<'
-      );
+    await gsap.to(this._slides[this._activeSlideIndex], {
+      alpha: 1,
+      duration: 0.2,
+    });
     this._animationIsPlaying = false;
   }
   /**
@@ -199,7 +152,5 @@ export default class Tutorial extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
-  onResize(width, height) {
-    // eslint-disable-line no-unused-vars
-  }
+  onResize(width, height) {}
 }

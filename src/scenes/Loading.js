@@ -1,5 +1,7 @@
 import Assets from '../core/AssetManager';
 import Scene from './Scene';
+import { Sprite } from 'pixi.js';
+import { fit } from '../core/utils';
 import ProgressBar from '../components/Loading/ProgressBar';
 import Logo from '../components/Loading/Logo';
 import config from '../config';
@@ -21,13 +23,18 @@ export default class Loading extends Scene {
       keyDefault: Assets.images['key-default'],
       keyLong: Assets.images['key-long'],
       arrow: Assets.images.arrow,
+      circle: Assets.images.circle,
     };
     const sounds = {};
 
     return super.preload({ images, sounds });
   }
 
-  onResize(width, height) {}
+  onResize(width, height) {
+    fit(this, { width, height });
+
+    // fit(this._progressBar, { width, height });
+  }
 
   onLoadProgress() {
     this._progressBar.fillProgressBar();
@@ -53,11 +60,9 @@ export default class Loading extends Scene {
    * @private
    */
   _createLogo() {
-    const logo = new Logo(Assets.images.ooo);
-
-    logo.x = this.width / 2 - 305;
-    logo.y = this.height / 2 - 150;
-    // logo.scale.set(1.1);
+    const logo = new Sprite.from(Assets.images.ooo);
+    logo.y = -70;
+    logo.anchor.set(0.5);
     this._logo = logo;
     this.addChild(this._logo);
   }
