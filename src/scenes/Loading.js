@@ -24,8 +24,21 @@ export default class Loading extends Scene {
       keyLong: Assets.images['key-long'],
       arrow: Assets.images.arrow,
       circle: Assets.images.circle,
+      planet1: Assets.images['planet-1'],
+      planet2: Assets.images['planet-2'],
+      planet3: Assets.images['planet-3'],
+      planet4: Assets.images['planet-4'],
+      rover: Assets.images.rover,
+      roverShadow: Assets.images['rover-shadow'],
+      roverHpBarbg: Assets.images['rover-health-bar'],
+      roverHpBarFill: Assets.images['hp-bar'],
+      rocket: Assets.images.rocket,
+      shieldActive: Assets.images['shield-active'],
+      shieldInactive: Assets.images['shield-inactive'],
     };
-    const sounds = {};
+    const sounds = {
+      shieldActivate: Assets.sounds.shieldActivate,
+    };
 
     return super.preload({ images, sounds });
   }
