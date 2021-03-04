@@ -29,6 +29,7 @@ export default class Loading extends Scene {
       planet3: Assets.images['planet-3'],
       planet4: Assets.images['planet-4'],
       rover: Assets.images.rover,
+      fire: Assets.images.fire,
       roverShadow: Assets.images['rover-shadow'],
       roverHpBarbg: Assets.images['rover-health-bar'],
       roverHpBarFill: Assets.images['hp-bar'],
@@ -37,7 +38,7 @@ export default class Loading extends Scene {
       shieldInactive: Assets.images['shield-inactive'],
     };
     const sounds = {
-      shieldActivate: Assets.sounds.shieldActivate,
+      // shieldActivate: Assets.sounds.shieldActivate,
     };
 
     return super.preload({ images, sounds });
