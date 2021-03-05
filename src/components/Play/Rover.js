@@ -1,7 +1,8 @@
 import { Sprite, Container } from 'pixi.js';
 import Shield from './Shield';
-import Assets from '../../core/AssetManager';
 import HealthBar from './HealthBar';
+import Rocket from './Rocket';
+import gsap from 'gsap/all';
 
 /**
  * Initializes a new instance of Rover
@@ -12,20 +13,16 @@ export default class Rover extends Container {
   constructor() {
     super();
     /**
-     *@type {PIXI.Sprite}
-     * @private
+     * @type {PIXI.Sprite}
+     * @public
      */
-    this._activeSheildTop = null;
-    /**
-     *@type {PIXI.Sprite}
-     * @private
-     */
-    this._activeSheildBottom = null;
+    this.shield = null;
     /**
      * @type {PIXI.Sprite}
      * @public
      */
     this.healthBar = null;
+    this.tl = new gsap.timeline();
     this._init();
   }
   /**
@@ -34,9 +31,14 @@ export default class Rover extends Container {
   _init() {
     this._createRoverVehicle();
     this._createRoverShadow();
-    this._createInactiveSheild();
-    this._createActiveSheild();
     this._createHealthBar();
+    this._createRocket();
+    this._createShied();
+  }
+  _createShied() {
+    const shield = new Shield();
+    this.shield = shield;
+    this.addChild(this.shield);
   }
   /**
    * @private
@@ -49,32 +51,9 @@ export default class Rover extends Container {
   /**
    * @private
    */
-  _createInactiveSheild() {
-    const bottom = new Shield('shieldInactive', -0.8, -120, -20, 0.84, 0.82);
-
-    const top = new Shield('shieldInactive', 0.8, -18, -120, 0.84, 0.84);
-
-    this.addChild(bottom, top);
-  }
-  /**
-   * @private
-   */
-  _createActiveSheild() {
-    const bottom = new Shield('shieldActive', -2.35, -117, -20, 0.84, 0.82, 0);
-
-    this._activeSheildBottom = bottom;
-
-    const top = new Shield('shieldActive', -0.75, -16, -117, 0.84, 0.84);
-
-    this._activeSheildTop = top;
-    this.addChild(this._activeSheildTop, this._activeSheildBottom);
-  }
-  /**
-   * @private
-   */
   _createRoverVehicle() {
     const rover = new Sprite.from('rover');
-
+    this.vehicle = rover;
     rover.anchor.set(0.5);
     this.addChild(rover);
   }
@@ -88,20 +67,32 @@ export default class Rover extends Container {
     shadow.y = 80;
     this.addChild(shadow);
   }
+
   /**
-   * @public
+   * @private
    */
-  activateBottomShield() {
-    this._activeSheildBottom.alpha = 1;
-    this._activeSheildTop.alpha = 0;
-    Assets.sounds.shieldActivate.play();
+  _createRocket() {
+    const rocket = new Rocket();
+    rocket.x = -150;
+    rocket.y = -30;
+    rocket.angle = 290;
+    rocket.alpha = 0;
+    this._rocket = rocket;
+    this.addChild(rocket);
   }
-  /**
-   * @public
-   */
-  activateTopShield() {
-    this._activeSheildBottom.alpha = 0;
-    this._activeSheildTop.alpha = 1;
-    Assets.sounds.shieldActivate.play();
+
+  stopRocket() {
+    this.tl.pause();
+  }
+
+  async fireRocket() {
+    this._rocket.alpha = 1;
+    await this.tl.to(this._rocket, {
+      x: -1500,
+      y: -140,
+      duration: 3,
+      onComplete: this.tl.seek(0),
+    });
+    this._rocket.alpha = 0;
   }
 }
