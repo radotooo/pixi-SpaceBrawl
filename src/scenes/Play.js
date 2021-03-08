@@ -14,9 +14,9 @@ export default class Play extends Scene {
     this._botPlanet.addChild(this._bot);
     this._addEventListeners();
     this._createTicker();
+    this.rocketIsBouncedBack = false;
     this._ticker.start();
-    // await this.delay(3000);
-    // this._bot.fireRocket();
+    this.setBotTurn();
   }
 
   delay(ms) {
@@ -32,86 +32,42 @@ export default class Play extends Scene {
     this._ticker.add(() => this._update());
   }
 
-  _checkShield(rocket, shieldHitPoints, player) {
-    shieldHitPoints.forEach((element) => {
-      if (checkCollision(rocket, element.getBounds())) {
-        if (this.reverse) {
-          player.resetRocket();
-        } else {
-          this.reverse = true;
-          player.reverseRocket();
-        }
-      }
-    });
-  }
-
   _detectInteraction(player, rover) {
-    const rocket = player._rocket.getBounds();
+    const rocket = player.rocket.getBounds();
     const enemeyRover = rover.vehicle.getBounds();
-    const playerRover = player.vehicle.getBounds();
     const enemyShield = rover.shield.getActiveShield();
 
     if (checkCollision(rocket, enemeyRover, 1.5, 1.5)) {
       this._ticker.stop();
       rover.healthBar.reduceHealth();
-      player.resetRocket();
-      // this._ticker.start();
+      player.rocket.resetRocket();
     }
 
     enemyShield.forEach((element) => {
       if (checkCollision(rocket, element.getBounds())) {
-        if (this.reverse) {
-          player.resetRocket();
+        if (this.rocketIsBouncedBack) {
+          this._ticker.stop();
+          player.rocket.resetRocket();
         } else {
-          this.reverse = true;
-          player.reverseRocket();
+          this.rocketIsBouncedBack = true;
+          player.rocket.reverse();
         }
       }
     });
   }
 
-  _detectInteractionWithShield(player, shield) {}
-
   _update() {
-    if (this._botTurn) {
-      const botRocket = this._bot._rocket.getBounds();
-      this._checkShield(
-        botRocket,
-        this._player.shield.getActiveShield(),
-        this._bot
-      );
-    }
-
-    if (this._playerTurn) {
-      const playerRocket = this._player._rocket.getBounds();
-      const botRover = this._bot.vehicle.getBounds();
-      const playerRover = this._player.vehicle.getBounds();
-
-      if (this.reverse) {
-        if (checkCollision(playerRocket, playerRover, 1.5)) {
-          this._ticker.stop();
-          this._player.healthBar.reduceHealth();
-          this._player.resetRocket();
-        }
-
-        this._checkShield(
-          playerRocket,
-          this._player.shield.getActiveShield(),
-          this._player
-        );
+    if (this._isPlayerTurn === false) {
+      if (this.rocketIsBouncedBack) {
+        this._detectInteraction(this._bot, this._bot);
+      } else {
+        this._detectInteraction(this._bot, this._player);
+      }
+    } else if (this._isPlayerTurn === true) {
+      if (this.rocketIsBouncedBack) {
+        this._detectInteraction(this._player, this._player);
       } else {
         this._detectInteraction(this._player, this._bot);
-        // if (checkCollision(playerRocket, botRover, 1.5)) {
-        //   this._ticker.stop();
-        //   this._bot.healthBar.reduceHealth();
-        //   this._player.resetRocket();
-        // }
-
-        // this._checkShield(
-        //   playerRocket,
-        //   this._bot.shield.getActiveShield(),
-        //   this._player
-        // );
       }
     }
   }
@@ -121,14 +77,14 @@ export default class Play extends Scene {
     player.position.x = -65;
     player.position.y = -400;
     this._player = player;
-    this._playerTurn = true;
+    // this._isPlayerTurn = false;
 
     const bot = new Rover();
     bot.position.x = 42;
     bot.position.y = 280;
     bot.angle = 180;
     this._bot = bot;
-    this._botTurn = true;
+    // this._botTurn = true;
   }
 
   _addEventListeners() {
@@ -137,12 +93,12 @@ export default class Play extends Scene {
         this._player.shield.activateTop();
         this._bot.shield.activateTop();
       }
-      if (event.key === ' ' && this._playerTurn) {
-        this._ticker.start();
-        this.reverse = false;
-        // this.fireRocket();
-        this._player.fireRocket();
-        // this._bot.fireRocket();
+
+      if (event.key === ' ') {
+        if (this._isPlayerTurn) {
+          this._player.rocket.fire();
+          this._ticker.start();
+        }
       }
       if (event.key === 'ArrowDown') {
         this._player.shield.activateBottom();
@@ -152,8 +108,36 @@ export default class Play extends Scene {
     document.addEventListener('click', () =>
       this._player.healthBar.reduceHealth()
     );
+
+    this._player.rocket.on('reverse', () => {
+      this.rocketIsBouncedBack = true;
+    });
+
+    this._player.rocket.on('reset', () => {
+      this.rocketIsBouncedBack = false;
+      this.setBotTurn();
+    });
+
+    this._bot.rocket.on('reset', () => {
+      this.rocketIsBouncedBack = false;
+      this.setPlayerTurn();
+    });
+
+    this._bot.rocket.on('reverse', () => {
+      this.rocketIsBouncedBack = true;
+    });
   }
 
+  setPlayerTurn() {
+    this._isPlayerTurn = true;
+  }
+
+  async setBotTurn() {
+    this._isPlayerTurn = false;
+    await this.delay(3000);
+    this._bot.rocket.fire();
+    this._ticker.start();
+  }
   _createPlanets() {
     const planet1 = new Planet(Texture.from('planet1'), 512, 471);
     const planet2 = new Planet(Texture.from('planet2'), -730, -440);

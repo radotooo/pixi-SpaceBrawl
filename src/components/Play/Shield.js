@@ -35,6 +35,14 @@ export default class Shield extends Container {
     this._createBottomActiveShieldHitPoints();
     this._createTopActiveShieldHitPoints();
   }
+  getActiveShield() {
+    if (this.activeShieldBottom.alpha === 1) {
+      return this.bottomHitPoints;
+    }
+
+    // console.log('vlizame');
+    return this.topHitPoints;
+  }
 
   /**
    * @private
@@ -108,18 +116,18 @@ export default class Shield extends Container {
       -117,
       -20,
       0.84,
-      0.82,
-      0
+      0.82
     );
     this.activeShieldBottom = bottom;
 
     const top = this._createShield(
       'shieldActive',
-      -0.75,
-      -16,
-      -117,
+      -0.8,
+      -18,
+      -120,
       0.84,
-      0.84
+      0.84,
+      0
     );
 
     this.activeShieldTop = top;
@@ -135,7 +143,7 @@ export default class Shield extends Container {
    * @param {Number} scaleY The y scale value
    * @param {Number} alpha The alpha value
    */
-  _createShield(texture, rotation, x, y, scaleX, scaleY, alpha) {
+  _createShield(texture, rotation, x, y, scaleX, scaleY, alpha = 1) {
     const shield = new Sprite.from(texture);
 
     shield.anchor.set(0.5);
