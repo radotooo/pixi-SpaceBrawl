@@ -59,3 +59,11 @@ export function checkCollision(el1, el2, el2Width = 1, el2Height = 1) {
     el1.y < el2.y + el2.height / el2Height
   );
 }
+
+export function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
