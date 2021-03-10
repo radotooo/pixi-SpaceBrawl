@@ -1,5 +1,5 @@
-import { Container, Sprite } from 'pixi.js';
-import Point from './Point';
+import { Container, Graphics, Sprite } from 'pixi.js';
+import HitArea from './HitArea';
 
 export default class Shield extends Container {
   constructor() {
@@ -18,12 +18,12 @@ export default class Shield extends Container {
      *@type {Array}
      * @public
      */
-    this.bottomHitPoints = [];
+    this.bottomHitArea = null;
     /**
      *@type {Array}
      * @public
      */
-    this.topHitPoints = [];
+    this.topHitArea = null;
     this._init();
   }
   /**
@@ -32,40 +32,36 @@ export default class Shield extends Container {
   _init() {
     this._createInactiveShield();
     this._createActiveShield();
-    this._createBottomActiveShieldHitPoints();
-    this._createTopActiveShieldHitPoints();
+    this._createBottomActiveShieldHitArea();
+    this._createTopActiveShieldHitArea();
   }
   getActiveShield() {
     if (this.activeShieldBottom.alpha === 1) {
-      return this.bottomHitPoints;
+      return this.bottomHitArea;
     }
 
     // console.log('vlizame');
-    return this.topHitPoints;
+    return this.topHitArea;
   }
 
   /**
    * @private
    */
-  _createBottomActiveShieldHitPoints() {
-    const point = new Point(-120, -85, 20);
-    const point2 = new Point(-125, -25, 30);
-    const point3 = new Point(-110, 35, 30);
+  _createBottomActiveShieldHitArea() {
+    const hitArea = new HitArea(-120, 110, 210, 60, 90);
 
-    this.bottomHitPoints.push(point, point2, point3);
-    this.addChild(point, point2, point3);
+    this.bottomHitArea = hitArea;
+    this.addChild(hitArea);
   }
 
   /**
    * @private
    */
-  _createTopActiveShieldHitPoints() {
-    const point = new Point(-80, -125, 20);
-    const point2 = new Point(-15, -130, 30);
-    const point3 = new Point(45, -115, 20);
+  _createTopActiveShieldHitArea() {
+    const hitArea = new HitArea(-120, -170, 210, 60);
 
-    this.topHitPoints.push(point, point2, point3);
-    this.addChild(point, point2, point3);
+    this.topHitArea = hitArea;
+    this.addChild(hitArea);
   }
   /**
    * @public
@@ -82,6 +78,17 @@ export default class Shield extends Container {
     this.activeShieldBottom.alpha = 0;
     this.activeShieldTop.alpha = 1;
     // Assets.sounds.shieldActivate.play();
+  }
+  /**
+   * Swap active shield parts
+   * @public
+   */
+  swap() {
+    if (this.activeShieldBottom.alpha === 1) {
+      this.activateTop();
+    } else {
+      this.activateBottom();
+    }
   }
   /**
    * @private
