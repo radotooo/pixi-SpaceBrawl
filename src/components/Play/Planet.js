@@ -33,7 +33,7 @@ export default class Planet extends Sprite {
       y: '+=random(-10,10)',
       yoyo: true,
       repeat: 1,
-      duration: 'random(2,4)',
+      duration: 'random(1,2)',
       onComplete: () => this._float(),
     });
   }

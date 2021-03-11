@@ -48,7 +48,7 @@ export default class Shield extends Container {
    * @private
    */
   _createBottomActiveShieldHitArea() {
-    const hitArea = new HitArea(-120, 110, 210, 60, 90);
+    const hitArea = new HitArea(-105, 120, 210, 50, 90);
 
     this.bottomHitArea = hitArea;
     this.addChild(hitArea);

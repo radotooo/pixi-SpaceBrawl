@@ -1,4 +1,6 @@
-import { Sprite, Container } from 'pixi.js';
+import { Sprite, Container, filters } from 'pixi.js';
+import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
+import gsap from 'gsap/all';
 
 /**
  * Initializes a new instance of HealthBar
@@ -33,11 +35,11 @@ export default class HealthBar extends Container {
    */
   _createHealthBar() {
     const hpBar = new Sprite.from('roverHpBarFill');
-
     hpBar.y = -80;
     hpBar.x = -69.5;
     hpBar.scale.x = 1.4;
     this._hpBar = hpBar;
+
     this.addChild(this._hpBar);
   }
   /**
@@ -45,10 +47,10 @@ export default class HealthBar extends Container {
    */
   _createBackground() {
     const hpBackground = new Sprite.from('roverHpBarbg');
-
     hpBackground.y = -75;
     hpBackground.x = -10;
     hpBackground.anchor.set(0.5);
+    this.hpBackground = hpBackground;
     this.addChild(hpBackground);
   }
   /**
@@ -63,9 +65,29 @@ export default class HealthBar extends Container {
    */
   reduceHealth() {
     this._hpBar.width -= this._hpLossOnHit;
-
-    if (this._hpBar.width < 1) {
-      console.log('gg');
+    if (this._hpBar.width < this._hpLossOnHit * 3) {
+      this._animateLowHp();
     }
+    if (this._hpBar.width < 1) {
+      this.emit('gg');
+    }
+  }
+
+  _animateLowHp() {
+    this.hpBackground.tint = 0xff0000;
+    this._hpBar.tint = 0xff0000;
+    gsap.fromTo(
+      this,
+      {
+        delay: 1,
+        alpha: 1,
+      },
+      {
+        alpha: 0.5,
+        yoyo: true,
+        repeat: -1,
+        duration: 1.5,
+      }
+    );
   }
 }

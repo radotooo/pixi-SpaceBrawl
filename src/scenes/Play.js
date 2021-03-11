@@ -1,59 +1,73 @@
 import Scene from './Scene';
-import { checkCollision } from '../core/utils';
-import { Texture, Ticker } from 'pixi.js';
+import { checkCollision, delay, random } from '../core/utils';
+import { Sprite, Texture, Ticker } from 'pixi.js';
 import Planet from '../components/Play/Planet';
+import Explosion from '../components/Play/Explosion';
 import Rover from '../components/Play/Rover';
 import gsap, { MotionPathPlugin } from 'gsap/all';
+import Rocket from '../components/Play/Rocket';
+
 gsap.registerPlugin(MotionPathPlugin);
 
 export default class Play extends Scene {
   async onCreated() {
     this._createPlanets();
     this._createPlayers();
-    this._playerPlanet.addChild(this._player);
-    this._botPlanet.addChild(this._bot);
+    this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
+    this._addPlayerToPlanet(this._bot, this._planet2, 40, 280, 180);
+    // const explosion = new Explosion();
+    // // explosion.angle = 180;
+
+    // this.addChild(explosion);
     this._addEventListeners();
     this._createTicker();
-    this.rocketIsBouncedBack = false;
-    this._ticker.start();
     this.setBotTurn();
   }
 
-  delay(ms) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, ms);
-    });
-  }
+  async test() {
+    this.rocket2.x = 400;
+    this.rocket2.y = 45;
 
+    this.rocket.x = -580;
+    this.rocket.y = -150;
+
+    this.rocket.pivot.x = this.rocket.width / 2;
+    this.rocket.pivot.y = this.rocket.height / 2;
+  }
+  _addPlayerToPlanet(player, planet, x, y, angle = 0) {
+    player.x = x;
+    player.y = y;
+    player.angle = angle;
+    planet.addChild(player);
+  }
   _createTicker() {
     this._ticker = new Ticker();
     this._ticker.add(() => this._update());
+    this._ticker.start();
   }
 
-  _detectInteraction(player, rover) {
+  _detectInteraction(player, enemy) {
     const rocket = player.rocket.getBounds();
-    const enemeyRover = rover.vehicle.getBounds();
-    const enemyShield = rover.shield.getActiveShield();
+    const enemeyRover = enemy.vehicle.getBounds();
+    const enemyShield = enemy.shield.getActiveShield();
 
-    if (checkCollision(rocket, enemeyRover, 1.5, 1.5)) {
+    if (checkCollision(rocket, enemeyRover, 1.2, 1)) {
+      this.rocketIsBouncedBack = false;
       this._ticker.stop();
-      rover.healthBar.reduceHealth();
+      enemy.healthBar.reduceHealth();
       player.rocket.resetRocket();
     }
 
-    enemyShield.forEach((element) => {
-      if (checkCollision(rocket, element.getBounds())) {
-        if (this.rocketIsBouncedBack) {
-          this._ticker.stop();
-          player.rocket.resetRocket();
-        } else {
-          this.rocketIsBouncedBack = true;
-          player.rocket.reverse();
-        }
+    if (checkCollision(rocket, enemyShield.getBounds())) {
+      if (this.rocketIsBouncedBack) {
+        this.rocketIsBouncedBack = false;
+        this._ticker.stop();
+        player.rocket.resetRocket();
+      } else {
+        this.rocketIsBouncedBack = true;
+        player.rocket.reverse();
       }
-    });
+    }
   }
 
   _update() {
@@ -74,17 +88,10 @@ export default class Play extends Scene {
 
   _createPlayers() {
     const player = new Rover();
-    player.position.x = -65;
-    player.position.y = -400;
     this._player = player;
-    // this._isPlayerTurn = false;
 
     const bot = new Rover();
-    bot.position.x = 42;
-    bot.position.y = 280;
-    bot.angle = 180;
     this._bot = bot;
-    // this._botTurn = true;
   }
 
   _addEventListeners() {
@@ -96,6 +103,7 @@ export default class Play extends Scene {
 
       if (event.key === ' ') {
         if (this._isPlayerTurn) {
+          // if (Math.floor(random(0.5, 2))) this._bot.shield.swap();
           this._player.rocket.fire();
           this._ticker.start();
         }
@@ -105,27 +113,22 @@ export default class Play extends Scene {
         this._bot.shield.activateBottom();
       }
     });
-    document.addEventListener('click', () =>
-      this._player.healthBar.reduceHealth()
-    );
 
-    this._player.rocket.on('reverse', () => {
-      this.rocketIsBouncedBack = true;
-    });
+    // this._player.rocket.on('reverse', () => {
+    //   this.rocketIsBouncedBack = true;
+    // });
 
     this._player.rocket.on('reset', () => {
-      this.rocketIsBouncedBack = false;
       this.setBotTurn();
     });
 
     this._bot.rocket.on('reset', () => {
-      this.rocketIsBouncedBack = false;
       this.setPlayerTurn();
     });
 
-    this._bot.rocket.on('reverse', () => {
-      this.rocketIsBouncedBack = true;
-    });
+    // this._bot.rocket.on('reverse', () => {
+    //   this.rocketIsBouncedBack = true;
+    // });
   }
 
   setPlayerTurn() {
@@ -134,17 +137,19 @@ export default class Play extends Scene {
 
   async setBotTurn() {
     this._isPlayerTurn = false;
-    await this.delay(3000);
+    await delay(3000);
     this._bot.rocket.fire();
     this._ticker.start();
+    // if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
   }
+
   _createPlanets() {
     const planet1 = new Planet(Texture.from('planet1'), 512, 471);
     const planet2 = new Planet(Texture.from('planet2'), -730, -440);
     const planet3 = new Planet(Texture.from('planet3'), -880, 415);
     const planet4 = new Planet(Texture.from('planet4'), 945, -625);
-    this._playerPlanet = planet1;
-    this._botPlanet = planet2;
+    this._planet1 = planet1;
+    this._planet2 = planet2;
     this.addChild(planet1, planet2, planet3, planet4);
   }
 
