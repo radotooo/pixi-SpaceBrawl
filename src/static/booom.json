@@ -1,0 +1,80 @@
+﻿{
+  "frames": {
+    "Symbol 10000": {
+      "frame": { "x": 0, "y": 0, "w": 102, "h": 48 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 112, "y": 124, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10001": {
+      "frame": { "x": 102, "y": 0, "w": 150, "h": 76 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 86, "y": 96, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10002": {
+      "frame": { "x": 252, "y": 0, "w": 184, "h": 103 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 68, "y": 73, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10003": {
+      "frame": { "x": 436, "y": 0, "w": 267, "h": 140 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 30, "y": 34, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10004": {
+      "frame": { "x": 703, "y": 0, "w": 294, "h": 172 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10005": {
+      "frame": { "x": 0, "y": 172, "w": 263, "h": 164 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 23, "y": 7, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10006": {
+      "frame": { "x": 263, "y": 172, "w": 233, "h": 138 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 53, "y": 32, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    },
+    "Symbol 10007": {
+      "frame": { "x": 496, "y": 172, "w": 182, "h": 131 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 75, "y": 40, "w": 297, "h": 176 },
+      "sourceSize": { "w": 297, "h": 176 }
+    }
+  },
+  "animations": {
+    "booom": [
+      "Symbol 10000",
+      "Symbol 10001",
+      "Symbol 10002",
+      "Symbol 10003",
+      "Symbol 10004",
+      "Symbol 10005",
+      "Symbol 10006",
+      "Symbol 10007"
+    ]
+  },
+  "meta": {
+    "app": "Adobe Animate",
+    "version": "21.0.4.39603",
+    "image": "booom.png",
+    "format": "RGBA8888",
+    "size": { "w": 1024, "h": 512 },
+    "scale": "1"
+  }
+}

@@ -43,7 +43,7 @@ export default class Tutorial extends Scene {
   async onCreated() {
     this._createSlides();
     this._createIndicatorDots(this._slides.length, this._config.infoDots.gap);
-    this._createButton('NEXT', 210, 60);
+    this._createButton();
     // this._setBackgroundBlur();
     this._addListeners();
   }
@@ -61,15 +61,15 @@ export default class Tutorial extends Scene {
   /**
    * @private
    */
-  _createButton(text, width, height) {
-    const button = new Button(text, width, height);
+  _createButton() {
+    const button = new Button('NEXT', 210, 60, 0, 300, true, true);
 
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
-    button.y = 300;
+    // button.y = 300;
     this._button = button;
-    this._button.buttonMode = true;
-    this._button.interactive = true;
+    // this._button.buttonMode = true;
+    // this._button.interactive = true;
     this.addChild(button);
   }
 
