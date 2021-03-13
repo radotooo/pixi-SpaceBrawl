@@ -7,17 +7,34 @@ import gsap from 'gsap/all';
  */
 export default class Button extends Container {
   /**
-   * @param {String} buttonText Button text value
-   * @param {Number} width Button width size
-   * @param {Number} height Button height size
+   * @param {String} buttonText The button text value
+   * @param {Number} width The button width size value
+   * @param {Number} height The button height size value
+   * @param {Number} x The x coordinate value
+   * @param {Number} y The y coordinate value
+   * @param {Boolean} buttonMode Make coursor pointer
+   * @param {Boolean} interactive Make button clickable
    */
-  constructor(buttonText, width, height) {
+  constructor(
+    buttonText,
+    width,
+    height,
+    x = 0,
+    y = 0,
+    buttonMode = false,
+    interactive = false
+  ) {
     super();
     this._height = height;
     this._width = width;
     this._text = buttonText;
 
     this._init();
+
+    this.x = x;
+    this.y = y;
+    this.buttonMode = buttonMode;
+    this.interactive = interactive;
   }
   /**
    * @private
@@ -25,12 +42,8 @@ export default class Button extends Container {
   _init() {
     this._createBackground();
     this._createText();
-    this._addListener();
     this._button.addChild(this._buttonText);
     this.addChild(this._button);
-  }
-  _addListener() {
-    this.on('click', () => this.emit('gg'));
   }
   /**
    * @private

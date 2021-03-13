@@ -1,14 +1,21 @@
 import { Container, Sprite } from 'pixi.js';
 import gsap, { MotionPathPlugin } from 'gsap';
-import config from '../../config';
 import { random } from '../../core/utils';
 import Fire from './Fire';
 
+const EVENTS = {
+  RESET: 'reset',
+};
+
 export default class Rocket extends Container {
-  constructor() {
+  constructor(config) {
     super();
-    this._paths = config.Rocket.paths;
+    this._paths = config.paths;
     this._init();
+  }
+
+  static get events() {
+    return EVENTS;
   }
 
   _init() {
@@ -27,14 +34,12 @@ export default class Rocket extends Container {
     this.tl.pause();
     this._animationIsPlaying = false;
 
-    this.emit('reset');
+    this.emit(Rocket.events.RESET);
   }
 
   async reverse() {
     this.tl.pause();
     this.angle = 100;
-
-    this.emit('reverse');
 
     await gsap.to(this, {
       x: -50,

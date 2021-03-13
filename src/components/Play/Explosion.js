@@ -1,7 +1,5 @@
-import { Container, AnimatedSprite, BLEND_MODES } from 'pixi.js';
+import { Container, AnimatedSprite } from 'pixi.js';
 import Assets from './../../core/AssetManager';
-import { delay } from '../../core/utils';
-import gsap from 'gsap/all';
 // import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 
 export default class Explosion extends Container {

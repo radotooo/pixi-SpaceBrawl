@@ -1,7 +1,6 @@
 import gsap from 'gsap/all';
 import { filters } from 'pixi.js';
 import config from '../config';
-import { fit } from '../core/utils';
 
 import Button from '../components/Button';
 import Scene from './Scene';
@@ -66,18 +65,15 @@ export default class Tutorial extends Scene {
 
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
-    // button.y = 300;
     this._button = button;
-    // this._button.buttonMode = true;
-    // this._button.interactive = true;
     this.addChild(button);
   }
 
   /**
    * @private
    */
-  _createIndicatorDots(count, gap) {
-    const indicatorDotSet = new IndicatorDotSet(count, gap);
+  _createIndicatorDots() {
+    const indicatorDotSet = new IndicatorDotSet(this._slides.length, 20);
 
     indicatorDotSet.pivot.x = indicatorDotSet.width / 2;
     indicatorDotSet.pivot.y = indicatorDotSet.height / 2;

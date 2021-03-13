@@ -1,6 +1,9 @@
-import { Sprite, Container, filters } from 'pixi.js';
-import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
+import { Sprite, Container } from 'pixi.js';
 import gsap from 'gsap/all';
+
+const EVENT = {
+  NO_HEALTH: 'no_health',
+};
 
 /**
  * Initializes a new instance of HealthBar
@@ -21,6 +24,10 @@ export default class HealthBar extends Container {
      */
     this._hpLossOnHit = 0;
     this._init();
+  }
+
+  static get events() {
+    return EVENT;
   }
   /**
    * @private
@@ -68,11 +75,13 @@ export default class HealthBar extends Container {
     if (this._hpBar.width < this._hpLossOnHit * 3) {
       this._animateLowHp();
     }
-    if (this._hpBar.width < 1) {
-      this.emit('gg');
+    if (this._hpBar.width < 100) {
+      this.emit(HealthBar.events.NO_HEALTH);
     }
   }
-
+  /**
+   * @private
+   */
   _animateLowHp() {
     this.hpBackground.tint = 0xff0000;
     this._hpBar.tint = 0xff0000;

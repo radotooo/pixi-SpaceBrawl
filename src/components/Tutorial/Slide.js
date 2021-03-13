@@ -46,8 +46,6 @@ export default class Slide extends Container {
     const key = new Sprite.from(this._config.img.assert);
 
     key.anchor.set(0.5);
-    key.scale.x = this._config.img.scaleX;
-    key.scale.y = this._config.img.scaleY;
     key.x = this._config.img.x;
     key.y = this._config.img.y;
     this._key = key;

@@ -1,45 +1,47 @@
 import Scene from './Scene';
 import { checkCollision, delay, random } from '../core/utils';
-import { Sprite, Texture, Ticker } from 'pixi.js';
+import { Texture, Ticker } from 'pixi.js';
 import Planet from '../components/Play/Planet';
-import Explosion from '../components/Play/Explosion';
 import Rover from '../components/Play/Rover';
-import gsap, { MotionPathPlugin } from 'gsap/all';
 import Rocket from '../components/Play/Rocket';
+import HealthBar from '../components/Play/HealthBar';
+import gsap, { MotionPathPlugin } from 'gsap/all';
+import config from '../config';
 
 gsap.registerPlugin(MotionPathPlugin);
+const EVENTS = {
+  GAME_OVER: 'game_over',
+};
 
 export default class Play extends Scene {
+  constructor() {
+    super();
+    this._config = config.scenes.Play;
+    this.gameOver = false;
+    this.rocketIsBouncedBack = false;
+  }
+
   async onCreated() {
     this._createPlanets();
     this._createPlayers();
     this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
     this._addPlayerToPlanet(this._bot, this._planet2, 40, 280, 180);
-    // const explosion = new Explosion();
-    // // explosion.angle = 180;
-
-    // this.addChild(explosion);
     this._addEventListeners();
     this._createTicker();
     this.setBotTurn();
   }
 
-  async test() {
-    this.rocket2.x = 400;
-    this.rocket2.y = 45;
-
-    this.rocket.x = -580;
-    this.rocket.y = -150;
-
-    this.rocket.pivot.x = this.rocket.width / 2;
-    this.rocket.pivot.y = this.rocket.height / 2;
+  static get events() {
+    return EVENTS;
   }
+
   _addPlayerToPlanet(player, planet, x, y, angle = 0) {
     player.x = x;
     player.y = y;
     player.angle = angle;
     planet.addChild(player);
   }
+
   _createTicker() {
     this._ticker = new Ticker();
     this._ticker.add(() => this._update());
@@ -60,8 +62,8 @@ export default class Play extends Scene {
 
     if (checkCollision(rocket, enemyShield.getBounds())) {
       if (this.rocketIsBouncedBack) {
-        this.rocketIsBouncedBack = false;
         this._ticker.stop();
+        this.rocketIsBouncedBack = false;
         player.rocket.resetRocket();
       } else {
         this.rocketIsBouncedBack = true;
@@ -87,48 +89,57 @@ export default class Play extends Scene {
   }
 
   _createPlayers() {
-    const player = new Rover();
+    const player = new Rover(this._config.rover);
     this._player = player;
 
-    const bot = new Rover();
+    const bot = new Rover(this._config.rover);
     this._bot = bot;
   }
 
   _addEventListeners() {
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowUp') {
+      if (event.code === this._config.controls.moveShieldUp) {
         this._player.shield.activateTop();
         this._bot.shield.activateTop();
       }
 
-      if (event.key === ' ') {
-        if (this._isPlayerTurn) {
-          // if (Math.floor(random(0.5, 2))) this._bot.shield.swap();
+      if (event.code === this._config.controls.shoot) {
+        if (this._isPlayerTurn && !this.gameOver) {
           this._player.rocket.fire();
           this._ticker.start();
         }
       }
-      if (event.key === 'ArrowDown') {
+      if (event.code === this._config.controls.moveShieldDown) {
         this._player.shield.activateBottom();
         this._bot.shield.activateBottom();
       }
     });
 
-    // this._player.rocket.on('reverse', () => {
-    //   this.rocketIsBouncedBack = true;
-    // });
-
-    this._player.rocket.on('reset', () => {
-      this.setBotTurn();
+    this._player.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
+      this.gameOver = true;
+      await this._player.explode();
+      await delay(1600);
+      this.emit(Play.events.GAME_OVER, { winner: '1' });
     });
 
-    this._bot.rocket.on('reset', () => {
-      this.setPlayerTurn();
+    this._bot.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
+      this.gameOver = true;
+      await this._bot.explode();
+      await delay(1600);
+      this.emit(Play.events.GAME_OVER, { winner: '2' });
     });
 
-    // this._bot.rocket.on('reverse', () => {
-    //   this.rocketIsBouncedBack = true;
-    // });
+    this._player.rocket.on(Rocket.events.RESET, () => {
+      if (!this.gameOver) {
+        this.setBotTurn();
+      }
+    });
+
+    this._bot.rocket.on(Rocket.events.RESET, () => {
+      if (!this.gameOver) {
+        this.setPlayerTurn();
+      }
+    });
   }
 
   setPlayerTurn() {
@@ -140,7 +151,7 @@ export default class Play extends Scene {
     await delay(3000);
     this._bot.rocket.fire();
     this._ticker.start();
-    // if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
+    if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
   }
 
   _createPlanets() {
@@ -162,5 +173,7 @@ export default class Play extends Scene {
    */
   onResize(width, height) {
     // eslint-disable-line no-unused-vars
+    // this.width = width;
+    // this.height = height;
   }
 }
