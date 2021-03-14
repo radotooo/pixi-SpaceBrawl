@@ -1,0 +1,88 @@
+﻿{
+  "frames": {
+    "Symbol 10010": {
+      "frame": { "x": 0, "y": 0, "w": 29, "h": 95 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 62, "y": 47, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10011": {
+      "frame": { "x": 29, "y": 0, "w": 48, "h": 68 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 52, "y": 36, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10012": {
+      "frame": { "x": 77, "y": 0, "w": 55, "h": 56 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 49, "y": 42, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10013": {
+      "frame": { "x": 132, "y": 0, "w": 70, "h": 71 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 41, "y": 35, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10014": {
+      "frame": { "x": 202, "y": 0, "w": 100, "h": 98 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 26, "y": 21, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10015": {
+      "frame": { "x": 302, "y": 0, "w": 117, "h": 110 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 18, "y": 15, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10016": {
+      "frame": { "x": 0, "y": 110, "w": 130, "h": 140 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 11, "y": 0, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10017": {
+      "frame": { "x": 130, "y": 110, "w": 152, "h": 139 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 0, "y": 1, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    },
+    "Symbol 10018": {
+      "frame": { "x": 282, "y": 110, "w": 123, "h": 120 },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": { "x": 15, "y": 10, "w": 152, "h": 142 },
+      "sourceSize": { "w": 152, "h": 142 }
+    }
+  },
+  "animations": {
+    "booom": [
+      "Symbol 10010",
+      "Symbol 10011",
+      "Symbol 10012",
+      "Symbol 10013",
+      "Symbol 10014",
+      "Symbol 10015",
+      "Symbol 10016",
+      "Symbol 10017",
+      "Symbol 10018"
+    ]
+  },
+  "meta": {
+    "app": "Adobe Animate",
+    "version": "21.0.4.39603",
+    "image": "firework.png",
+    "format": "RGBA8888",
+    "size": { "w": 512, "h": 256 },
+    "scale": "1"
+  }
+}
