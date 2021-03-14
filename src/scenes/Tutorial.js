@@ -35,15 +35,15 @@ export default class Tutorial extends Scene {
      */
     this._animationIsPlaying = false;
   }
+
   static get events() {
     return EVENTS;
   }
 
   async onCreated() {
     this._createSlides();
-    this._createIndicatorDots(this._slides.length, this._config.infoDots.gap);
+    this._createIndicatorDots();
     this._createButton();
-    // this._setBackgroundBlur();
     this._addListeners();
   }
 
@@ -51,12 +51,36 @@ export default class Tutorial extends Scene {
    * @private
    */
   _createSlides() {
-    const arrowUp = new Slide(this._config.slides.arrowUp);
-    const arrowDown = new Slide(this._config.slides.arrowDown);
-    const space = new Slide(this._config.slides.space);
+    const arrowUp = new Slide(
+      0,
+      -220,
+      'keyDefault',
+      'Press the "Up arrow" key to move the shield up',
+      true,
+      'arrow',
+      270
+    );
+
+    const arrowDown = new Slide(
+      0,
+      -220,
+      'keyDefault',
+      'Press the "Down arrow" key to move the shield down',
+      false,
+      'arrow',
+      90
+    );
+
+    const space = new Slide(
+      0,
+      -115,
+      'keyLong',
+      'Press the "Space" key to shoot'
+    );
     this.addChild(arrowUp, arrowDown, space);
     this._slides.push(arrowUp, arrowDown, space);
   }
+
   /**
    * @private
    */
@@ -81,6 +105,7 @@ export default class Tutorial extends Scene {
     this._indicatorDotSet = indicatorDotSet;
     this.addChild(this._indicatorDotSet);
   }
+
   /**
    * Set background blur effect
    * @private
@@ -141,6 +166,7 @@ export default class Tutorial extends Scene {
     });
     this._animationIsPlaying = false;
   }
+
   /**
    * Hook called by the application when the browser window is resized.
    * Use this to re-arrange the game elements according to the window size

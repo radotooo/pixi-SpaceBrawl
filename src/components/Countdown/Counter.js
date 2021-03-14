@@ -16,6 +16,7 @@ export default class Counter extends Container {
     this._count = count;
     this._init();
   }
+
   /**
    * @private
    */
@@ -23,6 +24,7 @@ export default class Counter extends Container {
     this._createCircle();
     this._createText();
   }
+
   /**
    * Add counter Numbers
    * @private
@@ -38,6 +40,7 @@ export default class Counter extends Container {
     text.anchor.set(0.5);
     this._circle.addChild(this._text);
   }
+
   /**
    * Start counter animation
    * @public
@@ -56,7 +59,6 @@ export default class Counter extends Container {
         repeat: 1,
       });
     }
-    // this._text.text = 'GO';
   }
 
   /**
@@ -64,13 +66,10 @@ export default class Counter extends Container {
    */
   _createCircle() {
     const circle = new Sprite.from(Assets.images.circle);
-    // const key = new Sprite.from(Assets.images['key-long']);
 
     circle.anchor.set(0.5);
-    circle.scale.set(0.5);
-    circle.y = -100;
+    circle.scale.set(0.65);
     this._circle = circle;
     this.addChild(circle);
-    // this.addChild(key);
   }
 }

@@ -75,7 +75,7 @@ export default class HealthBar extends Container {
     if (this._hpBar.width < this._hpLossOnHit * 3) {
       this._animateLowHp();
     }
-    if (this._hpBar.width < 100) {
+    if (this._hpBar.width < 80) {
       this.emit(HealthBar.events.NO_HEALTH);
     }
   }

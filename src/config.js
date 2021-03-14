@@ -21,51 +21,6 @@ export default {
     Splash: {
       hideDelay: 1800,
     },
-    Tutorial: {
-      slides: {
-        arrowUp: {
-          onFocus: true,
-          img: {
-            assert: 'keyDefault',
-            x: 0,
-            y: -220,
-          },
-          description: 'Press the "Up arrow" key to move the shield up',
-          hasCap: true,
-          cap: {
-            img: 'arrow',
-            angle: 270,
-          },
-        },
-        arrowDown: {
-          onFocus: false,
-          img: {
-            assert: 'keyDefault',
-            x: 0,
-            y: -220,
-          },
-          description: 'Press the "Down arrow" key to move the shield down',
-          hasCap: true,
-          cap: {
-            img: 'arrow',
-            angle: 90,
-          },
-        },
-        space: {
-          onFocus: false,
-          img: {
-            assert: 'keyLong',
-            x: 0,
-            y: -115,
-          },
-          description: 'Press the "Space" key to shoot',
-          hasCap: false,
-        },
-      },
-      infoDots: {
-        gap: 20,
-      },
-    },
     Play: {
       controls: {
         moveShieldDown: 'ArrowDown',
