@@ -86,7 +86,6 @@ export default class Tutorial extends Scene {
    */
   _createButton() {
     const button = new Button('NEXT', 210, 60, 0, 300, true, true);
-
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
     this._button = button;
@@ -117,6 +116,7 @@ export default class Tutorial extends Scene {
     blurFilter.quality = 8;
     this.background.filters = [blurFilter];
   }
+
   /**
    * @private
    */
@@ -128,6 +128,7 @@ export default class Tutorial extends Scene {
       this._changeActiveSlide();
     });
   }
+
   /**
    * @private
    */

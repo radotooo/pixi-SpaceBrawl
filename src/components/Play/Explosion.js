@@ -1,16 +1,20 @@
 import { Container, AnimatedSprite } from 'pixi.js';
 import Assets from './../../core/AssetManager';
-// import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 
+/**
+ * Initializes a new instance of Explosion
+ * @class
+ */
 export default class Explosion extends Container {
-  constructor(x, y) {
+  constructor() {
     super();
-    this._init();
 
-    this.x = x;
-    this.y = y;
+    this._init();
   }
 
+  /**
+   * @private
+   */
   _init() {
     const animation = new AnimatedSprite(
       Assets.spritesheets.booom.animations.booom
@@ -24,6 +28,10 @@ export default class Explosion extends Container {
     this.addChild(this.animation);
   }
 
+  /**
+   * Play animated sprite
+   * @public
+   */
   play() {
     this.animation.alpha = 1;
     this.animation.play();

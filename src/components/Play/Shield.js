@@ -1,5 +1,6 @@
 import { Container, Graphics, Sprite } from 'pixi.js';
 import HitArea from './HitArea';
+import Part from './Part';
 
 export default class Shield extends Container {
   constructor() {
@@ -9,23 +10,28 @@ export default class Shield extends Container {
      * @public
      */
     this.activeShieldTop = null;
+
     /**
      *@type {PIXI.Sprite}
      * @public
      */
     this.activeShieldBottom = null;
+
     /**
-     *@type {Array}
+     *@type {PIXI.Graphics}
      * @public
      */
     this.bottomHitArea = null;
+
     /**
-     *@type {Array}
+     *@type {PIXI.Graphics}
      * @public
      */
     this.topHitArea = null;
+
     this._init();
   }
+
   /**
    * @private
    */
@@ -35,13 +41,28 @@ export default class Shield extends Container {
     this._createBottomActiveShieldHitArea();
     this._createTopActiveShieldHitArea();
   }
-  getActiveShield() {
-    if (this.activeShieldBottom.alpha === 1) {
-      return this.bottomHitArea;
-    }
 
-    // console.log('vlizame');
-    return this.topHitArea;
+  /**
+   * @private
+   */
+  _createInactiveShield() {
+    const bottom = new Part('shieldInactive', -0.8, -120, -20, 0.84, 0.82);
+
+    const top = new Part('shieldInactive', 0.8, -18, -120, 0.84, 0.84);
+    this.addChild(bottom, top);
+  }
+
+  /**
+   * @private
+   */
+  _createActiveShield() {
+    const bottom = new Part('shieldActive', -2.35, -117, -20, 0.84, 0.82);
+    this.activeShieldBottom = bottom;
+
+    const top = new Part('shieldActive', -0.8, -18, -120, 0.84, 0.84, 0);
+
+    this.activeShieldTop = top;
+    this.addChild(this.activeShieldTop, this.activeShieldBottom);
   }
 
   /**
@@ -63,6 +84,19 @@ export default class Shield extends Container {
     this.topHitArea = hitArea;
     this.addChild(hitArea);
   }
+
+  /**
+   * Get active shield hit area
+   * @returns {PIXI.Graphics}
+   */
+  getActiveShieldHitArea() {
+    if (this.activeShieldBottom.alpha === 1) {
+      return this.bottomHitArea;
+    }
+
+    return this.topHitArea;
+  }
+
   /**
    * @public
    */
@@ -71,6 +105,7 @@ export default class Shield extends Container {
     this.activeShieldTop.alpha = 0;
     // Assets.sounds.shieldActivate.play();
   }
+
   /**
    * @public
    */
@@ -79,6 +114,7 @@ export default class Shield extends Container {
     this.activeShieldTop.alpha = 1;
     // Assets.sounds.shieldActivate.play();
   }
+
   /**
    * Swap active shield parts
    * @public
@@ -89,78 +125,5 @@ export default class Shield extends Container {
     } else {
       this.activateBottom();
     }
-  }
-  /**
-   * @private
-   */
-  _createInactiveShield() {
-    const bottom = this._createShield(
-      'shieldInactive',
-      -0.8,
-      -120,
-      -20,
-      0.84,
-      0.82
-    );
-
-    const top = this._createShield(
-      'shieldInactive',
-      0.8,
-      -18,
-      -120,
-      0.84,
-      0.84
-    );
-    this.addChild(bottom, top);
-  }
-  /**
-   * @private
-   */
-  _createActiveShield() {
-    const bottom = this._createShield(
-      'shieldActive',
-      -2.35,
-      -117,
-      -20,
-      0.84,
-      0.82
-    );
-    this.activeShieldBottom = bottom;
-
-    const top = this._createShield(
-      'shieldActive',
-      -0.8,
-      -18,
-      -120,
-      0.84,
-      0.84,
-      0
-    );
-
-    this.activeShieldTop = top;
-    this.addChild(this.activeShieldTop, this.activeShieldBottom);
-  }
-  /**
-   * Create Sprite object
-   * @param {Object} texture The Sprite texture
-   * @param {Number} rotation The rotation value
-   * @param {Number} x The x coordinate value
-   * @param {Number} y The y coordinate value
-   * @param {Number} scaleX The x scale value
-   * @param {Number} scaleY The y scale value
-   * @param {Number} alpha The alpha value
-   */
-  _createShield(texture, rotation, x, y, scaleX, scaleY, alpha = 1) {
-    const shield = new Sprite.from(texture);
-
-    shield.anchor.set(0.5);
-    shield.rotation = rotation;
-    shield.position.x = x;
-    shield.position.y = y;
-    shield.scale.x = scaleX;
-    shield.scale.y = scaleY;
-    shield.alpha = alpha;
-
-    return shield;
   }
 }

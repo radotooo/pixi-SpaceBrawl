@@ -1,11 +1,15 @@
 import { Container, Text } from 'pixi.js';
 import Bar from '../Bar';
 
+/**
+ * Initializes a new instance of InfoBar
+ * @class
+ */
 export default class InfoBar extends Container {
   /**
-   * @param {String} text The bar initial text value
-   * @param {Number} width The bar width size
-   * @param {Number} height The bar heigth size
+   * @param {String} text The bar text value
+   * @param {Number} width The bar width value
+   * @param {Number} height The bar heigth value
    */
   constructor(width, height, text = '') {
     super();
@@ -23,6 +27,7 @@ export default class InfoBar extends Container {
 
     this._init();
   }
+
   /**
    * @private
    */
@@ -30,6 +35,7 @@ export default class InfoBar extends Container {
     this._createBar();
     this.addChild(this._bar);
   }
+
   /**
    * @private
    */
@@ -49,8 +55,9 @@ export default class InfoBar extends Container {
     this._text = text;
     this._bar.addChild(this._text);
   }
+
   /**
-   * Change bar text value
+   * Set bar text value
    * @param {String} text
    */
   setText(text) {

@@ -1,5 +1,5 @@
 import { Container, Sprite } from 'pixi.js';
-import gsap, { MotionPathPlugin } from 'gsap';
+import gsap from 'gsap';
 import { random } from '../../core/utils';
 import Fire from './Fire';
 
@@ -7,10 +7,18 @@ const EVENTS = {
   RESET: 'reset',
 };
 
+/**
+ * Initializes a new instance of Rocket
+ * @class
+ */
 export default class Rocket extends Container {
+  /**
+   * @param {Object} config The rocket configuration
+   */
   constructor(config) {
     super();
     this._paths = config.paths;
+
     this._init();
   }
 
@@ -18,17 +26,40 @@ export default class Rocket extends Container {
     return EVENTS;
   }
 
+  /**
+   * @private
+   */
   _init() {
     this.sortableChildren = true;
     this._createRocket();
     this._addFire();
   }
 
+  /**
+   * @private
+   */
   _createRocket() {
     const rocket = new Sprite.from('rocket');
     this.addChild(rocket);
   }
 
+  /**
+   * @private
+   */
+  _addFire() {
+    const fire = new Fire();
+    fire.position.x = 20;
+    fire.position.y = 75;
+    fire.angle = 270;
+    fire.scale.x = 0.2;
+    fire.scale.y = 0.15;
+    fire.zIndex = -1;
+    this.addChild(fire);
+  }
+
+  /**
+   * @public
+   */
   async resetRocket() {
     this.alpha = 0;
     this.tl.pause();
@@ -37,6 +68,9 @@ export default class Rocket extends Container {
     this.emit(Rocket.events.RESET);
   }
 
+  /**
+   * @public
+   */
   async reverse() {
     this.tl.pause();
     this.angle = 100;
@@ -48,6 +82,9 @@ export default class Rocket extends Container {
     });
   }
 
+  /**
+   * @public
+   */
   async fire() {
     if (this._animationIsPlaying) return;
 
@@ -68,8 +105,6 @@ export default class Rocket extends Container {
       {
         motionPath: {
           path: this._paths[randomPath],
-          // path:
-          //   'M1 1C-0.33333 82.3333 82.2 243.6 423 238C763.8 232.4 958.333 186.333 1013 164',
           start: 1,
           end: 0,
           align: this,
@@ -85,16 +120,5 @@ export default class Rocket extends Container {
     );
     this.alpha = 0;
     this._animationIsPlaying = false;
-  }
-
-  _addFire() {
-    const fire = new Fire();
-    fire.position.x = 20;
-    fire.position.y = 75;
-    fire.angle = 270;
-    fire.scale.x = 0.2;
-    fire.scale.y = 0.12;
-    fire.zIndex = -1;
-    this.addChild(fire);
   }
 }

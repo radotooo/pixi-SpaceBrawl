@@ -8,8 +8,8 @@ export default class IndicatorDotSet extends Container {
   /**
    * @param {Number} count The dots count
    * @param {Number} gap The gap betwee dots
-   * @param {Number} x The x coordinate of indicatorDotSet
-   * @param {Number} y The y coordinate of idicatorDotSet
+   * @param {Number} x The x coordinate value
+   * @param {Number} y The y coordinate value
    */
   constructor(count, gap, x = 0, y = 0) {
     super();
@@ -22,6 +22,7 @@ export default class IndicatorDotSet extends Container {
 
     this._createDotSet(this._count, this._gap);
   }
+
   /**
    * Redraw dots on scene update
    * @public
@@ -32,6 +33,7 @@ export default class IndicatorDotSet extends Container {
     this._clearOldDots();
     this._createDotSet(this._count, this._gap);
   }
+
   /**
    * Check if dot exist
    * @returns {Boolean}
@@ -39,6 +41,7 @@ export default class IndicatorDotSet extends Container {
   _isDotExist() {
     return this._activeDotIndex < this._count;
   }
+
   /**
    * Remove old dots from canvas
    * @private
@@ -48,6 +51,7 @@ export default class IndicatorDotSet extends Container {
       this._dots.forEach((c) => c.destroy());
     }
   }
+
   /**
    * Create dots set and based on dotIndex value make according dot active(set color white)
    * @param {Number} count The dont to number of dots to be created

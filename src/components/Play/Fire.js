@@ -1,36 +1,40 @@
 import { Container, AnimatedSprite, BLEND_MODES } from 'pixi.js';
 import Assets from './../../core/AssetManager';
 
+/**
+ * Initializes a new instance of Fire
+ * @class
+ */
 export default class Fire extends Container {
   constructor() {
     super();
+    /**
+     * @type {PIXI.AnimatedSprite}
+     * @private
+     */
+    this._fire = null;
 
-    this._top = null;
-    this._bottom = null;
-
-    this._bottom = new AnimatedSprite(Assets.spritesheets.fire.animations.fire);
-    this._bottom.blendMode = BLEND_MODES.HUE;
-    this._bottom.alpha = 0.1;
-    this._bottom.anchor.set(0.5);
-    this.addChild(this._bottom);
-
-    this._top = new AnimatedSprite(Assets.spritesheets.fire.animations.fire);
-    this._top.blendMode = BLEND_MODES.ADD_NPM;
-    this._top.anchor.set(0.5);
-    this.addChild(this._top);
-
-    this.ignite();
+    this._createFire();
+    this._play();
   }
 
-  ignite() {
-    this._top.play();
-    this._bottom.play();
+  /**
+   * @private
+   */
+  _createFire() {
+    const fire = new AnimatedSprite(Assets.spritesheets.fire.animations.fire);
+    fire.blendMode = BLEND_MODES.ADD;
+    fire.anchor.set(0.5);
+    this._fire = fire;
+    this.addChild(this._fire);
+  }
+
+  /**
+   * Play animated sprite
+   * @private
+   */
+  _play() {
+    this._fire.play();
     this.alpha = 1;
-  }
-
-  extinguish() {
-    this._top.pause();
-    this._bottom.pause();
-    this.alpha = 0;
   }
 }

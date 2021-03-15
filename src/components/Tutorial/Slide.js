@@ -3,7 +3,6 @@ import InfoBar from './InfoBar';
 
 /**
  * Initializes a new instance of Slide
-  
  * @class
  */
 export default class Slide extends Container {
@@ -36,6 +35,7 @@ export default class Slide extends Container {
 
     this._init();
   }
+
   /**
    * @private
    */
@@ -44,6 +44,7 @@ export default class Slide extends Container {
     this._createInfoBar();
     this._setFocus();
   }
+
   /**
    * @private
    */
@@ -53,13 +54,7 @@ export default class Slide extends Container {
       this.alpha = 1;
     }
   }
-  /**
-   * @readonly
-   * @returns {String} Slide description
-   */
-  get description() {
-    return this._barDescription;
-  }
+
   /**
    * @private
    */
@@ -81,6 +76,7 @@ export default class Slide extends Container {
 
     this.addChild(this._key);
   }
+
   /**
    * @private
    */

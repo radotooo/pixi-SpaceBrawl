@@ -23,6 +23,7 @@ export default class Planet extends Sprite {
 
     this._float();
   }
+
   /**
    * Add floating effect
    * @private

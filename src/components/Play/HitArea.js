@@ -8,7 +8,7 @@ export default class Point extends Graphics {
   /**
    * @param {Number} x The x coordinate value
    * @param {Number} y The y coordinate value
-   * @param {Number} widht The width value
+   * @param {Number} width The width value
    * @param {Number} height The height value
    * @param {Number} angle The angle value
    */
@@ -22,6 +22,7 @@ export default class Point extends Graphics {
 
     this._draw();
   }
+
   /**
    * @private
    */

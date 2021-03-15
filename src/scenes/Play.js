@@ -1,6 +1,6 @@
 import Scene from './Scene';
 import { checkCollision, delay, random } from '../core/utils';
-import { Texture, Ticker } from 'pixi.js';
+import { Sprite, Texture, Ticker } from 'pixi.js';
 import Planet from '../components/Play/Planet';
 import Rover from '../components/Play/Rover';
 import Rocket from '../components/Play/Rocket';
@@ -9,6 +9,7 @@ import gsap, { MotionPathPlugin } from 'gsap/all';
 import config from '../config';
 
 gsap.registerPlugin(MotionPathPlugin);
+
 const EVENTS = {
   GAME_OVER: 'game_over',
 };
@@ -16,25 +17,51 @@ const EVENTS = {
 export default class Play extends Scene {
   constructor() {
     super();
+    /**
+     * @type {Object}
+     * @private
+     */
     this._config = config.scenes.Play;
-    this.gameOver = false;
-    this.rocketIsBouncedBack = false;
+
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._gameover = false;
+
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._rocketIsBouncedBack = false;
   }
 
   async onCreated() {
+    this._createBackground();
     this._createPlanets();
     this._createPlayers();
     this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
     this._addPlayerToPlanet(this._bot, this._planet2, 40, 280, 180);
     this._addEventListeners();
     this._createTicker();
-    this.setBotTurn();
+    this._setBotTurn();
   }
 
   static get events() {
     return EVENTS;
   }
+  /**
+   * @private
+   */
+  _createBackground() {
+    const background = new Sprite.from('playBg');
+    background.anchor.set(0.5);
+    this.addChild(background);
+  }
 
+  /**
+   * @private
+   */
   _addPlayerToPlanet(player, planet, x, y, angle = 0) {
     player.x = x;
     player.y = y;
@@ -42,45 +69,54 @@ export default class Play extends Scene {
     planet.addChild(player);
   }
 
+  /**
+   * @private
+   */
   _createTicker() {
     this._ticker = new Ticker();
     this._ticker.add(() => this._update());
     this._ticker.start();
   }
 
+  /**
+   * @private
+   */
   _detectInteraction(player, enemy) {
     const rocket = player.rocket.getBounds();
     const enemeyRover = enemy.vehicle.getBounds();
-    const enemyShield = enemy.shield.getActiveShield();
+    const enemyShield = enemy.shield.getActiveShieldHitArea();
 
     if (checkCollision(rocket, enemeyRover, 1.2, 1)) {
-      this.rocketIsBouncedBack = false;
+      this._rocketIsBouncedBack = false;
       this._ticker.stop();
       enemy.healthBar.reduceHealth();
       player.rocket.resetRocket();
     }
 
     if (checkCollision(rocket, enemyShield.getBounds())) {
-      if (this.rocketIsBouncedBack) {
+      if (this._rocketIsBouncedBack) {
         this._ticker.stop();
-        this.rocketIsBouncedBack = false;
+        this._rocketIsBouncedBack = false;
         player.rocket.resetRocket();
       } else {
-        this.rocketIsBouncedBack = true;
+        this._rocketIsBouncedBack = true;
         player.rocket.reverse();
       }
     }
   }
 
+  /**
+   * @private
+   */
   _update() {
     if (this._isPlayerTurn === false) {
-      if (this.rocketIsBouncedBack) {
+      if (this._rocketIsBouncedBack) {
         this._detectInteraction(this._bot, this._bot);
       } else {
         this._detectInteraction(this._bot, this._player);
       }
     } else if (this._isPlayerTurn === true) {
-      if (this.rocketIsBouncedBack) {
+      if (this._rocketIsBouncedBack) {
         this._detectInteraction(this._player, this._player);
       } else {
         this._detectInteraction(this._player, this._bot);
@@ -88,6 +124,9 @@ export default class Play extends Scene {
     }
   }
 
+  /**
+   * @private
+   */
   _createPlayers() {
     const player = new Rover(this._config.rover);
     this._player = player;
@@ -96,6 +135,9 @@ export default class Play extends Scene {
     this._bot = bot;
   }
 
+  /**
+   * @private
+   */
   _addEventListeners() {
     document.addEventListener('keydown', (event) => {
       if (event.code === this._config.controls.moveShieldUp) {
@@ -104,7 +146,7 @@ export default class Play extends Scene {
       }
 
       if (event.code === this._config.controls.shoot) {
-        if (this._isPlayerTurn && !this.gameOver) {
+        if (this._isPlayerTurn && !this._gameover) {
           this._player.rocket.fire();
           this._ticker.start();
         }
@@ -116,37 +158,43 @@ export default class Play extends Scene {
     });
 
     this._player.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this.gameOver = true;
+      this._gameover = true;
       await this._player.explode();
       await delay(1600);
       this.emit(Play.events.GAME_OVER, { winner: '1' });
     });
 
     this._bot.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this.gameOver = true;
+      this._gameover = true;
       await this._bot.explode();
       await delay(1600);
       this.emit(Play.events.GAME_OVER, { winner: '2' });
     });
 
     this._player.rocket.on(Rocket.events.RESET, () => {
-      if (!this.gameOver) {
-        this.setBotTurn();
+      if (!this._gameover) {
+        this._setBotTurn();
       }
     });
 
     this._bot.rocket.on(Rocket.events.RESET, () => {
-      if (!this.gameOver) {
-        this.setPlayerTurn();
+      if (!this._gameover) {
+        this._setPlayerTurn();
       }
     });
   }
 
-  setPlayerTurn() {
+  /**
+   * @private
+   */
+  _setPlayerTurn() {
     this._isPlayerTurn = true;
   }
 
-  async setBotTurn() {
+  /**
+   * @private
+   */
+  async _setBotTurn() {
     this._isPlayerTurn = false;
     await delay(3000);
     this._bot.rocket.fire();
@@ -154,6 +202,9 @@ export default class Play extends Scene {
     if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
   }
 
+  /**
+   * @private
+   */
   _createPlanets() {
     const planet1 = new Planet(Texture.from('planet1'), 512, 471);
     const planet2 = new Planet(Texture.from('planet2'), -730, -440);

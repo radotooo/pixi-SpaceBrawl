@@ -18,17 +18,20 @@ export default class HealthBar extends Container {
      * @private
      */
     this._hpBar = null;
+
     /**
      * @type {Number}
      * @private
      */
     this._hpLossOnHit = 0;
+
     this._init();
   }
 
   static get events() {
     return EVENT;
   }
+
   /**
    * @private
    */
@@ -37,6 +40,7 @@ export default class HealthBar extends Container {
     this._createHealthBar();
     this._setHpLoss();
   }
+
   /**
    * @private
    */
@@ -49,6 +53,7 @@ export default class HealthBar extends Container {
 
     this.addChild(this._hpBar);
   }
+
   /**
    * @private
    */
@@ -60,6 +65,7 @@ export default class HealthBar extends Container {
     this.hpBackground = hpBackground;
     this.addChild(hpBackground);
   }
+
   /**
    * Set hp loss to 10% of element width
    * @private
@@ -67,6 +73,7 @@ export default class HealthBar extends Container {
   _setHpLoss() {
     this._hpLossOnHit = this._hpBar.width * 0.1;
   }
+
   /**
    * @public
    */
@@ -79,6 +86,7 @@ export default class HealthBar extends Container {
       this.emit(HealthBar.events.NO_HEALTH);
     }
   }
+
   /**
    * @private
    */

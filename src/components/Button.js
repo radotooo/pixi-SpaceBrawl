@@ -36,6 +36,7 @@ export default class Button extends Container {
     this.buttonMode = buttonMode;
     this.interactive = interactive;
   }
+
   /**
    * @private
    */
@@ -45,6 +46,7 @@ export default class Button extends Container {
     this._button.addChild(this._buttonText);
     this.addChild(this._button);
   }
+
   /**
    * @private
    */
@@ -56,6 +58,7 @@ export default class Button extends Container {
     button.endFill();
     this._button = button;
   }
+
   /**
    * @private
    */
@@ -71,6 +74,7 @@ export default class Button extends Container {
     buttonText.y = this._height / 2;
     this._buttonText = buttonText;
   }
+
   /**
    * @public
    */

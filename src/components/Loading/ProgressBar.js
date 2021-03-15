@@ -18,6 +18,7 @@ export default class ProgressBar extends Container {
 
     this._init();
   }
+
   /**
    * @private
    */
@@ -42,7 +43,6 @@ export default class ProgressBar extends Container {
     this._progressBar = progressBar;
   }
 
-  // TODO make it goood
   /**
    * @public
    */
