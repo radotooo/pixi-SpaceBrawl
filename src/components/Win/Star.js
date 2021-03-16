@@ -4,6 +4,7 @@ import gsap from 'gsap';
 /**
  * Initializes a new instance of Star
  * @class
+ * @extends {PIXI.Sprite}
  */
 export default class Star extends Sprite {
   /**
@@ -14,16 +15,21 @@ export default class Star extends Sprite {
    */
   constructor(x, y, scale, angle) {
     super(Texture.from('star'));
+
     this.x = x;
     this.y = y;
-    this.const = x;
     this.scale.set(scale);
     this.angle = angle;
     this.anchor.set(0.5);
+
     this._addRotationEffect();
     this._float();
   }
 
+  /**
+   * Add flaot effect to star
+   * @private
+   */
   _float() {
     gsap.to(this, {
       x: '+=random(-20,20)',
@@ -35,6 +41,7 @@ export default class Star extends Sprite {
       onComplete: () => this._float(),
     });
   }
+
   /**
    * Add rotation effect to star on mouse movement
    * @private

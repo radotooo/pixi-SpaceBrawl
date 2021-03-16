@@ -10,6 +10,7 @@ const EVENTS = {
 /**
  * Initializes a new instance of Rocket
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Rocket extends Container {
   /**
@@ -40,6 +41,7 @@ export default class Rocket extends Container {
    */
   _createRocket() {
     const rocket = new Sprite.from('rocket');
+
     this.addChild(rocket);
   }
 
@@ -48,6 +50,7 @@ export default class Rocket extends Container {
    */
   _addFire() {
     const fire = new Fire();
+
     fire.position.x = 20;
     fire.position.y = 75;
     fire.angle = 270;

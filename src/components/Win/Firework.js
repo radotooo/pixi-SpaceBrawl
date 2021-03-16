@@ -1,15 +1,22 @@
 import { Container, AnimatedSprite } from 'pixi.js';
 import Assets from '../../core/AssetManager';
 
+/**
+ * Initializes a new instance of Slide
+ * @class
+ * @extends {PIXI.Container}
+ */
 export default class Firework extends Container {
-  constructor(x, y) {
+  constructor() {
     super();
+
     this._createFirework();
     this._play();
-    this.x = x;
-    this.y = y;
   }
 
+  /**
+   * @private
+   */
   _createFirework() {
     const animation = new AnimatedSprite(
       Assets.spritesheets.fireworks.animations.booom
@@ -24,6 +31,10 @@ export default class Firework extends Container {
     this.addChild(this._animation);
   }
 
+  /**
+   * Play animated sprite
+   * @private
+   */
   _play() {
     this._animation.alpha = 1;
     this._animation.play();

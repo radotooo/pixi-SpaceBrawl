@@ -6,6 +6,7 @@ import gsap from 'gsap';
 /**
  * Initializes a new instance of ProgressBar
  * @class
+ * @extends {PIXI.Container}
  */
 export default class ProgressBar extends Container {
   constructor() {

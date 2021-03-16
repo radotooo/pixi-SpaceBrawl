@@ -8,7 +8,7 @@ const EVENT = {
 /**
  * Initializes a new instance of HealthBar
  * @class
- * @extends PIXI.Container
+ * @extends {PIXI.Container}
  */
 export default class HealthBar extends Container {
   constructor() {
@@ -46,6 +46,7 @@ export default class HealthBar extends Container {
    */
   _createHealthBar() {
     const hpBar = new Sprite.from('roverHpBarFill');
+
     hpBar.y = -80;
     hpBar.x = -69.5;
     hpBar.scale.x = 1.4;
@@ -59,6 +60,7 @@ export default class HealthBar extends Container {
    */
   _createBackground() {
     const hpBackground = new Sprite.from('roverHpBarbg');
+
     hpBackground.y = -75;
     hpBackground.x = -10;
     hpBackground.anchor.set(0.5);

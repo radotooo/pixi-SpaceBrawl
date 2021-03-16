@@ -11,6 +11,7 @@ export default class Loading extends Scene {
     super();
 
     this.config = config.scenes.Splash;
+
     this._init();
   }
 
@@ -34,10 +35,10 @@ export default class Loading extends Scene {
       1: Assets.images['1'],
       2: Assets.images['2'],
       wins: Assets.images.wins,
-      // explosion: Assets.images.explosion,
+      fireworks: Assets.images.firework,
+      playBg: Assets.images.playBg,
+      countdownBg: Assets.images.countdownBg,
       booom: Assets.images.booom,
-      booom3: Assets.images.booom3,
-      // exp3: Assets.images.exp3,
       roverShadow: Assets.images['rover-shadow'],
       roverHpBarbg: Assets.images['rover-health-bar'],
       roverHpBarFill: Assets.images['hp-bar'],
@@ -46,7 +47,7 @@ export default class Loading extends Scene {
       shieldInactive: Assets.images['shield-inactive'],
     };
     const sounds = {
-      // shieldActivate: Assets.sounds.shieldActivate,
+      shieldActivate: Assets.sounds.shieldActivate,
     };
 
     return super.preload({ images, sounds });
@@ -54,8 +55,6 @@ export default class Loading extends Scene {
 
   onResize(width, height) {
     fit(this, { width, height });
-
-    // fit(this._progressBar, { width, height });
   }
 
   onLoadProgress() {

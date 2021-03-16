@@ -4,6 +4,7 @@ import gsap from 'gsap/all';
 /**
  * Initializes a new instance of Button
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Button extends Container {
   /**

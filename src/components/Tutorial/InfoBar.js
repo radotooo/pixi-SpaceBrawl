@@ -41,6 +41,7 @@ export default class InfoBar extends Container {
    */
   _createBar() {
     const bar = new Bar(this._width, this._height);
+
     this._bar = bar;
     const text = new Text('', {
       fill: '0xffffff',

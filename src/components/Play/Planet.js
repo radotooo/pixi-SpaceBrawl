@@ -4,6 +4,7 @@ import gsap from 'gsap/all';
 /**
  * Initializes a new instance of Planet
  * @class
+ * @extends {PIXI.Sprite}
  */
 export default class Planet extends Sprite {
   /**

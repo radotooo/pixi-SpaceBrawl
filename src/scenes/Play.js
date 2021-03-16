@@ -50,6 +50,7 @@ export default class Play extends Scene {
   static get events() {
     return EVENTS;
   }
+
   /**
    * @private
    */
@@ -57,6 +58,30 @@ export default class Play extends Scene {
     const background = new Sprite.from('playBg');
     background.anchor.set(0.5);
     this.addChild(background);
+  }
+
+  /**
+   * @private
+   */
+  _createPlanets() {
+    const planet1 = new Planet(Texture.from('planet1'), 512, 471);
+    const planet2 = new Planet(Texture.from('planet2'), -730, -440);
+    const planet3 = new Planet(Texture.from('planet3'), -880, 415);
+    const planet4 = new Planet(Texture.from('planet4'), 945, -625);
+    this._planet1 = planet1;
+    this._planet2 = planet2;
+    this.addChild(planet1, planet2, planet3, planet4);
+  }
+
+  /**
+   * @private
+   */
+  _createPlayers() {
+    const player = new Rover(this._config.rover);
+    this._player = player;
+
+    const bot = new Rover(this._config.rover);
+    this._bot = bot;
   }
 
   /**
@@ -81,58 +106,19 @@ export default class Play extends Scene {
   /**
    * @private
    */
-  _detectInteraction(player, enemy) {
-    const rocket = player.rocket.getBounds();
-    const enemeyRover = enemy.vehicle.getBounds();
-    const enemyShield = enemy.shield.getActiveShieldHitArea();
-
-    if (checkCollision(rocket, enemeyRover, 1.2, 1)) {
-      this._rocketIsBouncedBack = false;
-      this._ticker.stop();
-      enemy.healthBar.reduceHealth();
-      player.rocket.resetRocket();
-    }
-
-    if (checkCollision(rocket, enemyShield.getBounds())) {
-      if (this._rocketIsBouncedBack) {
-        this._ticker.stop();
-        this._rocketIsBouncedBack = false;
-        player.rocket.resetRocket();
-      } else {
-        this._rocketIsBouncedBack = true;
-        player.rocket.reverse();
-      }
-    }
+  async _setBotTurn() {
+    this._isPlayerTurn = false;
+    await delay(3000);
+    this._bot.rocket.fire();
+    this._ticker.start();
+    if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
   }
 
   /**
    * @private
    */
-  _update() {
-    if (this._isPlayerTurn === false) {
-      if (this._rocketIsBouncedBack) {
-        this._detectInteraction(this._bot, this._bot);
-      } else {
-        this._detectInteraction(this._bot, this._player);
-      }
-    } else if (this._isPlayerTurn === true) {
-      if (this._rocketIsBouncedBack) {
-        this._detectInteraction(this._player, this._player);
-      } else {
-        this._detectInteraction(this._player, this._bot);
-      }
-    }
-  }
-
-  /**
-   * @private
-   */
-  _createPlayers() {
-    const player = new Rover(this._config.rover);
-    this._player = player;
-
-    const bot = new Rover(this._config.rover);
-    this._bot = bot;
+  _setPlayerTurn() {
+    this._isPlayerTurn = true;
   }
 
   /**
@@ -187,32 +173,47 @@ export default class Play extends Scene {
   /**
    * @private
    */
-  _setPlayerTurn() {
-    this._isPlayerTurn = true;
+  _detectInteraction(player, enemy) {
+    const rocket = player.rocket.getBounds();
+    const enemeyRover = enemy.vehicle.getBounds();
+    const enemyShield = enemy.shield.getActiveShieldHitArea();
+
+    if (checkCollision(rocket, enemeyRover, 1.2, 1)) {
+      this._rocketIsBouncedBack = false;
+      this._ticker.stop();
+      enemy.healthBar.reduceHealth();
+      player.rocket.resetRocket();
+    }
+
+    if (checkCollision(rocket, enemyShield.getBounds())) {
+      if (this._rocketIsBouncedBack) {
+        this._ticker.stop();
+        this._rocketIsBouncedBack = false;
+        player.rocket.resetRocket();
+      } else {
+        this._rocketIsBouncedBack = true;
+        player.rocket.reverse();
+      }
+    }
   }
 
   /**
    * @private
    */
-  async _setBotTurn() {
-    this._isPlayerTurn = false;
-    await delay(3000);
-    this._bot.rocket.fire();
-    this._ticker.start();
-    if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
-  }
-
-  /**
-   * @private
-   */
-  _createPlanets() {
-    const planet1 = new Planet(Texture.from('planet1'), 512, 471);
-    const planet2 = new Planet(Texture.from('planet2'), -730, -440);
-    const planet3 = new Planet(Texture.from('planet3'), -880, 415);
-    const planet4 = new Planet(Texture.from('planet4'), 945, -625);
-    this._planet1 = planet1;
-    this._planet2 = planet2;
-    this.addChild(planet1, planet2, planet3, planet4);
+  _update() {
+    if (this._isPlayerTurn === false) {
+      if (this._rocketIsBouncedBack) {
+        this._detectInteraction(this._bot, this._bot);
+      } else {
+        this._detectInteraction(this._bot, this._player);
+      }
+    } else if (this._isPlayerTurn === true) {
+      if (this._rocketIsBouncedBack) {
+        this._detectInteraction(this._player, this._player);
+      } else {
+        this._detectInteraction(this._player, this._bot);
+      }
+    }
   }
 
   /**

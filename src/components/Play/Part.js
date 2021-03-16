@@ -3,6 +3,7 @@ import { Sprite, Texture } from 'pixi.js';
 /**
  * Initializes a new instance of Part
  * @class
+ * @extends {PIXI.Sprite}
  */
 export default class Part extends Sprite {
   /**

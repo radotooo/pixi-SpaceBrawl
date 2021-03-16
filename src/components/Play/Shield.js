@@ -1,7 +1,13 @@
-import { Container, Graphics, Sprite } from 'pixi.js';
+import { Container } from 'pixi.js';
 import HitArea from './HitArea';
 import Part from './Part';
+import Assets from '../../core/AssetManager';
 
+/**
+ * Initializes a new instance of Shield
+ * @class
+ * @extends {PIXI.Containerclass}
+ */
 export default class Shield extends Container {
   constructor() {
     super();
@@ -103,7 +109,7 @@ export default class Shield extends Container {
   activateBottom() {
     this.activeShieldBottom.alpha = 1;
     this.activeShieldTop.alpha = 0;
-    // Assets.sounds.shieldActivate.play();
+    Assets.sounds.shieldActivate.play();
   }
 
   /**
@@ -112,7 +118,7 @@ export default class Shield extends Container {
   activateTop() {
     this.activeShieldBottom.alpha = 0;
     this.activeShieldTop.alpha = 1;
-    // Assets.sounds.shieldActivate.play();
+    Assets.sounds.shieldActivate.play();
   }
 
   /**

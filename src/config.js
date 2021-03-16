@@ -21,6 +21,9 @@ export default {
     Splash: {
       hideDelay: 1800,
     },
+    Countdown: {
+      counter: 3,
+    },
     Play: {
       controls: {
         moveShieldDown: 'ArrowDown',

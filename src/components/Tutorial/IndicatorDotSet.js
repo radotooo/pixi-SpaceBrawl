@@ -3,6 +3,7 @@ import { Container, Graphics } from 'pixi.js';
 /**
  * Initializes a new instance of IndicatorDotSet
  * @class
+ * @extends {PIXI.Container}
  */
 export default class IndicatorDotSet extends Container {
   /**

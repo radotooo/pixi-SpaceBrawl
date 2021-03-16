@@ -4,6 +4,7 @@ import Assets from './../../core/AssetManager';
 /**
  * Initializes a new instance of Explosion
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Explosion extends Container {
   constructor() {

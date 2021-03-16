@@ -4,6 +4,7 @@ import InfoBar from './InfoBar';
 /**
  * Initializes a new instance of Slide
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Slide extends Container {
   /**
@@ -66,7 +67,7 @@ export default class Slide extends Container {
     key.y = this._keyY;
     this._key = key;
 
-    if (this._hasCap) {
+    if (this._capTexture) {
       const keyCap = new Sprite.from(this._capTexture);
 
       keyCap.anchor.set(0.5);

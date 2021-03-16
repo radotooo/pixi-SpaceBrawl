@@ -3,6 +3,7 @@ import { Graphics } from 'pixi.js';
 /**
  * Initializes a new instance of HitArea
  * @class
+ * @extends {PIXI.Graphics}
  */
 export default class Point extends Graphics {
   /**

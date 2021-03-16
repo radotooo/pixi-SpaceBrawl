@@ -6,6 +6,7 @@ import gsap from 'gsap/all';
 /**
  * Initializes a new instance of Counter
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Counter extends Container {
   /**

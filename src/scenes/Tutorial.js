@@ -34,6 +34,7 @@ export default class Tutorial extends Scene {
      * @private
      */
     this._animationIsPlaying = false;
+    this._tutorialDone = false;
   }
 
   static get events() {
@@ -134,6 +135,7 @@ export default class Tutorial extends Scene {
    */
   async _changeActiveSlide() {
     if (this._activeSlideIndex >= this._slides.length - 1) {
+      this._tutorialDone = true;
       this.emit(Tutorial.events.TUTORIAL_DONE);
 
       return;

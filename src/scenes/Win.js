@@ -8,8 +8,11 @@ import { delay } from '../core/utils';
 export default class Win extends Scene {
   constructor({ winner }) {
     super();
+    /**
+     * @type {String} The texture name
+     * @private
+     */
     this._winner = winner;
-    this.sortableChildren = true;
   }
 
   async onCreated() {
@@ -20,14 +23,27 @@ export default class Win extends Scene {
     this._createFireworks();
   }
 
+  /**
+   * @private
+   */
   async _createFireworks() {
-    const fireWork = new Firework(-400, -100);
+    const fireWork = new Firework();
+
+    fireWork.x = -400;
+    fireWork.y = -100;
     this.addChild(fireWork);
+
     await delay(300);
-    const fireWork2 = new Firework(350, -250);
+    const fireWork2 = new Firework();
+
+    fireWork2.x = 300;
+    fireWork2.y = -250;
     this.addChild(fireWork2);
   }
 
+  /**
+   * @private
+   */
   _createEventListeners() {
     this._button.on('click', () => {
       this._button.handleClick();
@@ -35,12 +51,18 @@ export default class Win extends Scene {
     });
   }
 
+  /**
+   * @private
+   */
   _createTitle() {
-    const winner = new Title(this._winner, 0, -235);
+    const winner = new Title(this._winner);
 
     this.addChild(winner);
   }
 
+  /**
+   * @private
+   */
   _createButton() {
     const button = new Button('RETRY', 210, 60, 0, 375, true, true);
     button.pivot.x = button.width / 2;
@@ -50,6 +72,9 @@ export default class Win extends Scene {
     this.addChild(button);
   }
 
+  /**
+   * @private
+   */
   _createStars() {
     const star = new Star(-540, -360, 0.65, 35);
     const star1 = new Star(418, -375, 0.35, 40);

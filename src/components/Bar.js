@@ -3,6 +3,7 @@ import { Container, Graphics } from 'pixi.js';
 /**
  * Initializes a new instance of Bar
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Bar extends Container {
   /**

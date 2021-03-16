@@ -3,21 +3,19 @@ import { Sprite, Container } from 'pixi.js';
 /**
  * Initializes a new instance of Title
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Title extends Container {
   /**
    * @param {String} texture The texture name
-   * @param {Number} x The x coordinate value
-   * @param {Number} y The y coordiante value
    */
-  constructor(texture, x, y) {
+  constructor(texture) {
     super();
     this._texture = texture;
-    this._x = x;
-    this._y = y;
 
     this._init();
   }
+
   /**
    * @private
    */
@@ -25,17 +23,19 @@ export default class Title extends Container {
     this._createWinner();
     this._createText();
   }
+
   /**
    * @private
    */
   _createWinner() {
     const winner = new Sprite.from(this._texture);
 
-    winner.x = this._x;
-    winner.y = this._y;
+    winner.x = this._texture === '1' ? -90 : 0;
+    winner.y = -235;
     winner.anchor.set(0.5);
     this.addChild(winner);
   }
+
   /**
    * @private
    */
