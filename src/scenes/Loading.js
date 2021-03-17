@@ -57,14 +57,15 @@ export default class Loading extends Scene {
     fit(this, { width, height });
   }
 
-  onLoadProgress() {
-    this._progressBar.fillProgressBar();
+  onLoadProgress(val) {
+    this._progressBar.fillProgressBar(val);
   }
 
   _init() {
     this._createProgressBar();
     this._createLogo();
   }
+
   /**
    * @private
    */
