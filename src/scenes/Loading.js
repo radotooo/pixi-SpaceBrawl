@@ -61,6 +61,9 @@ export default class Loading extends Scene {
     this._progressBar.fillProgressBar(val);
   }
 
+  /**
+   * @private
+   */
   _init() {
     this._createProgressBar();
     this._createLogo();

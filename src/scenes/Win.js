@@ -5,6 +5,10 @@ import Button from '../components/Button';
 import Title from '../components/Win/Title';
 import { delay } from '../core/utils';
 
+const EVENTS = {
+  RESTART_GAME: 'restart_game',
+};
+
 export default class Win extends Scene {
   constructor({ winner }) {
     super();
@@ -21,6 +25,10 @@ export default class Win extends Scene {
     this._createButton();
     this._createEventListeners();
     this._createFireworks();
+  }
+
+  static get events() {
+    return EVENTS;
   }
 
   /**
@@ -47,7 +55,7 @@ export default class Win extends Scene {
   _createEventListeners() {
     this._button.on('click', () => {
       this._button.handleClick();
-      this.emit('again');
+      this.emit(Win.events.RESTART_GAME);
     });
   }
 

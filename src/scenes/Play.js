@@ -7,7 +7,7 @@ import Rocket from '../components/Play/Rocket';
 import HealthBar from '../components/Play/HealthBar';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import config from '../config';
-
+import { GlowFilter } from '@pixi/filter-glow';
 gsap.registerPlugin(MotionPathPlugin);
 
 const EVENTS = {
@@ -108,6 +108,14 @@ export default class Play extends Scene {
    */
   async _setBotTurn() {
     this._isPlayerTurn = false;
+    this._player.vehicle.filters = [];
+    this._bot.vehicle.filters = [
+      new GlowFilter({
+        outerStrength: 3,
+        distance: 1,
+      }),
+    ];
+
     await delay(3000);
     this._bot.rocket.fire();
     this._ticker.start();
@@ -119,6 +127,13 @@ export default class Play extends Scene {
    */
   _setPlayerTurn() {
     this._isPlayerTurn = true;
+    this._bot.vehicle.filters = [];
+    this._player.vehicle.filters = [
+      new GlowFilter({
+        outerStrength: 3,
+        distance: 1,
+      }),
+    ];
   }
 
   /**

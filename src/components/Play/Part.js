@@ -16,7 +16,7 @@ export default class Part extends Sprite {
    * @param {Number} scaleY The y scale value
    * @param {Number} alpha The alpha value
    */
-  constructor(texture, rotation, x, y, scaleX, scaleY, alpha) {
+  constructor(texture, rotation, x, y, scaleX, scaleY, alpha = 1) {
     super(Texture.from(texture));
 
     this.anchor.set(0.5);

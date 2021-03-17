@@ -46,10 +46,8 @@ export default class HealthBar extends Container {
    */
   _createHealthBar() {
     const hpBar = new Sprite.from('roverHpBarFill');
-
-    hpBar.y = -80;
+    hpBar.y = -81.5;
     hpBar.x = -69.5;
-    hpBar.scale.x = 1.4;
     this._hpBar = hpBar;
 
     this.addChild(this._hpBar);

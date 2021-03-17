@@ -92,7 +92,6 @@ export default class Rover extends Container {
    */
   _createRoverShadow() {
     const shadow = new Sprite.from('roverShadow');
-
     shadow.anchor.set(0.5);
     shadow.y = 80;
     this._shadow = shadow;

@@ -15,25 +15,25 @@ export default class Shield extends Container {
      *@type {PIXI.Sprite}
      * @public
      */
-    this.activeShieldTop = null;
+    this._activeShieldTop = null;
 
     /**
      *@type {PIXI.Sprite}
      * @public
      */
-    this.activeShieldBottom = null;
+    this._activeShieldBottom = null;
 
     /**
      *@type {PIXI.Graphics}
      * @public
      */
-    this.bottomHitArea = null;
+    this._bottomHitArea = null;
 
     /**
      *@type {PIXI.Graphics}
      * @public
      */
-    this.topHitArea = null;
+    this._topHitArea = null;
 
     this._init();
   }
@@ -63,12 +63,12 @@ export default class Shield extends Container {
    */
   _createActiveShield() {
     const bottom = new Part('shieldActive', -2.35, -117, -20, 0.84, 0.82);
-    this.activeShieldBottom = bottom;
+    this._activeShieldBottom = bottom;
 
     const top = new Part('shieldActive', -0.8, -18, -120, 0.84, 0.84, 0);
 
-    this.activeShieldTop = top;
-    this.addChild(this.activeShieldTop, this.activeShieldBottom);
+    this._activeShieldTop = top;
+    this.addChild(this._activeShieldTop, this._activeShieldBottom);
   }
 
   /**
@@ -77,8 +77,8 @@ export default class Shield extends Container {
   _createBottomActiveShieldHitArea() {
     const hitArea = new HitArea(-105, 120, 210, 50, 90);
 
-    this.bottomHitArea = hitArea;
-    this.addChild(hitArea);
+    this._bottomHitArea = hitArea;
+    this.addChild(this._bottomHitArea);
   }
 
   /**
@@ -87,8 +87,8 @@ export default class Shield extends Container {
   _createTopActiveShieldHitArea() {
     const hitArea = new HitArea(-120, -170, 210, 60);
 
-    this.topHitArea = hitArea;
-    this.addChild(hitArea);
+    this._topHitArea = hitArea;
+    this.addChild(this._topHitArea);
   }
 
   /**
@@ -96,19 +96,19 @@ export default class Shield extends Container {
    * @returns {PIXI.Graphics}
    */
   getActiveShieldHitArea() {
-    if (this.activeShieldBottom.alpha === 1) {
-      return this.bottomHitArea;
+    if (this._activeShieldBottom.alpha === 1) {
+      return this._bottomHitArea;
     }
 
-    return this.topHitArea;
+    return this._topHitArea;
   }
 
   /**
    * @public
    */
   activateBottom() {
-    this.activeShieldBottom.alpha = 1;
-    this.activeShieldTop.alpha = 0;
+    this._activeShieldBottom.alpha = 1;
+    this._activeShieldTop.alpha = 0;
     Assets.sounds.shieldActivate.play();
   }
 
@@ -116,8 +116,8 @@ export default class Shield extends Container {
    * @public
    */
   activateTop() {
-    this.activeShieldBottom.alpha = 0;
-    this.activeShieldTop.alpha = 1;
+    this._activeShieldBottom.alpha = 0;
+    this._activeShieldTop.alpha = 1;
     Assets.sounds.shieldActivate.play();
   }
 
@@ -126,7 +126,7 @@ export default class Shield extends Container {
    * @public
    */
   swap() {
-    if (this.activeShieldBottom.alpha === 1) {
+    if (this._activeShieldBottom.alpha === 1) {
       this.activateTop();
     } else {
       this.activateBottom();
