@@ -1,12 +1,15 @@
 import Loading from './scenes/Loading';
 import Countdown from './scenes/Countdown';
 import Play from './scenes/Play';
-// import Loading from './scenes/Loading2';
+import Win from './scenes/Win';
+import gsap from 'gsap/all';
 import { Container } from 'pixi.js';
 import Tutorial from './scenes/Tutorial';
-import Logo from './components/Loading/Logo';
 import fire from './static/fire.json';
+import fireworks from './static/fireworks.json';
+import booom from './static/booom.json';
 import Assets from './core/AssetManager';
+
 /**
  * Main game stage, manages scenes/levels.
  *
@@ -30,35 +33,82 @@ export default class Game extends Container {
   }
 
   async start() {
-    // await this.switchScene(Countdown, { scene: 'countdown' });
+    this._addEventListeners();
+
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
-    await Assets.prepareSpritesheets([{ texture: 'fire', data: fire }]);
-    await this.switchScene(Play, { scene: 'play' });
-    // this.switchScene(Tutorial, { scene: 'tutorial' });
+    await this.switchScene(Tutorial, { scene: 'tutorial' });
 
-    // this.currentScene.on(Tutorial.events.TUTORIAL_DONE, () => {
-    //   this.switchScene(Countdown, { scene: 'countdown' });
-    //   this.currentScene.on('radoto', () => {
-    //     this.switchScene(Loading, { scene: 'loading' });
-    //     console.log(this.currentScene);
-    //   });
-    // });
+    await Assets.prepareSpritesheets([{ texture: 'booom', data: booom }]);
+    await Assets.prepareSpritesheets([
+      { texture: 'fireworks', data: fireworks },
+    ]);
+    await Assets.prepareSpritesheets([{ texture: 'fire', data: fire }]);
   }
 
   /**
    * @param {Function} constructor
    * @param {String} scene
+   * @param {Obejct} data
    */
-  switchScene(constructor, scene) {
+  async switchScene(constructor, scene, data = {}) {
+    await this._fadeOut();
     this.removeChild(this.currentScene);
-    this.currentScene = new constructor();
+
+    this.currentScene = new constructor(data);
+    this.currentScene.alpha = 0;
     this.currentScene.background = this._background;
+
     this.addChild(this.currentScene);
 
     this.emit(Game.events.SWITCH_SCENE, { scene });
 
-    return this.currentScene.onCreated();
+    this.currentScene.onCreated();
+    await this._fadeIn();
+  }
+
+  /**
+   * Add fade in on scene enter
+   * @private
+   */
+  async _fadeIn() {
+    await gsap.to(this.currentScene, {
+      alpha: 1,
+      duration: 0.1,
+    });
+  }
+
+  /**
+   * Add fade out on scene leave
+   * @private
+   */
+  async _fadeOut() {
+    await gsap.to(this.currentScene, {
+      alpha: 0,
+      duration: 0.2,
+    });
+  }
+
+  /**
+   * @private
+   */
+  _addEventListeners() {
+    this.on(Game.events.SWITCH_SCENE, () => {
+      this.currentScene.on(Tutorial.events.TUTORIAL_DONE, async () => {
+        await this.switchScene(Countdown, { scene: 'countdown' });
+      });
+
+      this.currentScene.on(Countdown.events.START_GAME, async () => {
+        await this.switchScene(Play, { scene: 'play' });
+      });
+      this.currentScene.on(Play.events.GAME_OVER, async (data) => {
+        await this.switchScene(Win, { scene: 'win' }, data);
+      });
+      this.currentScene.on(
+        Win.events.RESTART_GAME,
+        async () => await this.switchScene(Countdown, { scene: 'countdown' })
+      );
+    });
   }
 
   /**
