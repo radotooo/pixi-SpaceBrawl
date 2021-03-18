@@ -1,7 +1,6 @@
 import gsap from 'gsap/all';
 import { filters } from 'pixi.js';
 import config from '../config';
-
 import Button from '../components/Button';
 import Scene from './Scene';
 import Slide from '../components/Tutorial/Slide';
@@ -14,6 +13,11 @@ const EVENTS = {
 export default class Tutorial extends Scene {
   constructor() {
     super();
+    /**
+     * @type {String}
+     * @private
+     */
+    this._name = 'tutorial';
     /**
      * @type {Object}
      * @private
@@ -34,6 +38,10 @@ export default class Tutorial extends Scene {
      * @private
      */
     this._animationIsPlaying = false;
+    /**
+     * @type {Boolean}
+     * @private
+     */
     this._tutorialDone = false;
   }
 
@@ -86,9 +94,12 @@ export default class Tutorial extends Scene {
    * @private
    */
   _createButton() {
-    const button = new Button('NEXT', 210, 60, 0, 300, true, true);
+    const button = new Button('NEXT', 210, 60, true, true);
+
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
+    button.y = 300;
+
     this._button = button;
     this.addChild(button);
   }

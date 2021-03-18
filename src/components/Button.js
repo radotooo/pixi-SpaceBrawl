@@ -11,8 +11,6 @@ export default class Button extends Container {
    * @param {String} buttonText The button text value
    * @param {Number} width The button width size value
    * @param {Number} height The button height size value
-   * @param {Number} x The x coordinate value
-   * @param {Number} y The y coordinate value
    * @param {Boolean} buttonMode Make coursor pointer
    * @param {Boolean} interactive Make button clickable
    */
@@ -20,20 +18,21 @@ export default class Button extends Container {
     buttonText,
     width,
     height,
-    x = 0,
-    y = 0,
     buttonMode = false,
     interactive = false
   ) {
     super();
+    /**
+     * @type {String}
+     * @private
+     */
+    this._name = 'button';
     this._height = height;
     this._width = width;
     this._text = buttonText;
 
     this._init();
 
-    this.x = x;
-    this.y = y;
     this.buttonMode = buttonMode;
     this.interactive = interactive;
   }

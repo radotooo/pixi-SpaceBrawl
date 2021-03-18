@@ -18,6 +18,11 @@ export default class Play extends Scene {
   constructor() {
     super();
     /**
+     * @type {String}
+     * @private
+     */
+    this._name = 'play';
+    /**
      * @type {Object}
      * @private
      */

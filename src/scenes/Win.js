@@ -10,13 +10,21 @@ const EVENTS = {
 };
 
 export default class Win extends Scene {
+  /**
+   * @param {String} winner The win scene title texture
+   */
   constructor({ winner }) {
     super();
     /**
-     * @type {String} The texture name
+     * @type {String}
      * @private
      */
     this._winner = winner;
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._button = null;
   }
 
   async onCreated() {
@@ -72,9 +80,11 @@ export default class Win extends Scene {
    * @private
    */
   _createButton() {
-    const button = new Button('RETRY', 210, 60, 0, 375, true, true);
+    const button = new Button('RETRY', 210, 60, true, true);
+
     button.pivot.x = button.width / 2;
     button.pivot.y = button.height / 2;
+    button.y = 375;
 
     this._button = button;
     this.addChild(button);

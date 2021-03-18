@@ -11,6 +11,11 @@ export default class Countdown extends Scene {
   constructor() {
     super();
     /**
+     * @type {String}
+     * @private
+     */
+    this._name = 'countdown';
+    /**
      * @type {PIXI.Container}
      * @private
      */
