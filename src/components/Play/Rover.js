@@ -4,6 +4,7 @@ import HealthBar from './HealthBar';
 import Rocket from './Rocket';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import Explosion from './Explosion';
+import { GlowFilter } from '@pixi/filter-glow';
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -69,6 +70,22 @@ export default class Rover extends Container {
   }
 
   /**
+   * @public
+   */
+  toggleVehicleGlowFilter() {
+    if (this.vehicle.filters.length === 0) {
+      this.vehicle.filters = [
+        new GlowFilter({
+          outerStrength: 3,
+          distance: 1,
+        }),
+      ];
+    } else {
+      this.vehicle.filters = [];
+    }
+  }
+
+  /**
    * @private
    */
   _createHealthBar() {
@@ -82,6 +99,7 @@ export default class Rover extends Container {
   _createRoverVehicle() {
     const rover = new Sprite.from('rover');
     this.vehicle = rover;
+    this.vehicle.filters = [];
     rover.anchor.set(0.5);
     this.vehicle.addChild(this.healthBar);
     this.addChild(rover);

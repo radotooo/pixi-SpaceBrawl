@@ -97,30 +97,39 @@ export default class Rocket extends Container {
     this.tl = tl;
 
     this._animationIsPlaying = true;
-    this.alpha = 1;
 
-    await this.tl.fromTo(
-      this,
-      {
-        x: -100,
-        y: 22,
-      },
-      {
-        motionPath: {
-          path: this._paths[randomPath],
-          start: 1,
-          end: 0,
-          align: this,
-          offsetX: -960,
-          offsetY: -180,
-          autoRotate: 1.57,
-          useRadians: true,
+    await this.tl
+      .fromTo(
+        this,
+        {
+          x: -100,
+          y: 22,
         },
+        {
+          motionPath: {
+            path: this._paths[randomPath],
+            start: 1,
+            end: 0,
+            align: this,
+            offsetX: -960,
+            offsetY: -180,
+            autoRotate: 1.57,
+            useRadians: true,
+          },
 
-        duration: 3,
-        ease: 'power1.in',
-      }
-    );
+          duration: 3,
+          ease: 'power1.in',
+        }
+      )
+      .to(
+        this,
+        {
+          alpha: 1,
+          duration: 0.5,
+        },
+        '<'
+      );
+
     this.alpha = 0;
     this._animationIsPlaying = false;
   }

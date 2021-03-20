@@ -48,18 +48,38 @@ export function center(
  * @param {Number} max
  */
 export function random(min, max) {
-  return Math.random() * (max - min) + min;
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
-export function checkCollision(el1, el2, el2Width = 1, el2Height = 1) {
+/**
+ * @param {Object} el1 PIXI element bounds
+ * @param {Object} el2 PIXI element bounds
+ * @param {Number} el2Width Reduce element2 width
+ * @param {Number} el2Height Reduce element2 height
+ * @param {Number} el1Width Reduce element1 width
+ * @param {Number} el1Height Reduce element1 height
+ * @returns {Boolean}
+ */
+export function checkCollision(
+  el1,
+  el2,
+  el2Width = 1,
+  el2Height = 1,
+  el1Width = 1.5,
+  el1Height = 1.5
+) {
   return (
-    el1.x + el1.width / 1.5 > el2.x &&
+    el1.x + el1.width / el1Width > el2.x &&
     el1.x < el2.x + el2.width / el2Width &&
-    el1.y + el1.height / 1.5 > el2.y &&
+    el1.y + el1.height / el1Height > el2.y &&
     el1.y < el2.y + el2.height / el2Height
   );
 }
 
+/**
+ * @param {Number} ms Milliseconds
+ * @returns {Promise}
+ */
 export function delay(ms) {
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -1,13 +1,14 @@
 import Scene from './Scene';
 import { checkCollision, delay, random } from '../core/utils';
-import { Sprite, Texture, Ticker } from 'pixi.js';
+import { Sprite, Texture, Ticker, AnimatedSprite } from 'pixi.js';
 import Planet from '../components/Play/Planet';
 import Rover from '../components/Play/Rover';
 import Rocket from '../components/Play/Rocket';
 import HealthBar from '../components/Play/HealthBar';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import config from '../config';
-import { GlowFilter } from '@pixi/filter-glow';
+import Assets from '../core/AssetManager';
+
 gsap.registerPlugin(MotionPathPlugin);
 
 const EVENTS = {
@@ -46,7 +47,7 @@ export default class Play extends Scene {
     this._createPlanets();
     this._createPlayers();
     this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
-    this._addPlayerToPlanet(this._bot, this._planet2, 40, 280, 180);
+    this._addPlayerToPlanet(this._enemy, this._planet2, 40, 280, 180);
     this._addEventListeners();
     this._createTicker();
     this._setBotTurn();
@@ -86,7 +87,7 @@ export default class Play extends Scene {
     this._player = player;
 
     const bot = new Rover(this._config.rover);
-    this._bot = bot;
+    this._enemy = bot;
   }
 
   /**
@@ -105,40 +106,6 @@ export default class Play extends Scene {
   _createTicker() {
     this._ticker = new Ticker();
     this._ticker.add(() => this._update());
-    this._ticker.start();
-  }
-
-  /**
-   * @private
-   */
-  async _setBotTurn() {
-    this._isPlayerTurn = false;
-    this._player.vehicle.filters = [];
-    this._bot.vehicle.filters = [
-      new GlowFilter({
-        outerStrength: 3,
-        distance: 1,
-      }),
-    ];
-
-    await delay(3000);
-    this._bot.rocket.fire();
-    this._ticker.start();
-    if (Math.floor(random(0.3, 2))) this._bot.shield.swap();
-  }
-
-  /**
-   * @private
-   */
-  _setPlayerTurn() {
-    this._isPlayerTurn = true;
-    this._bot.vehicle.filters = [];
-    this._player.vehicle.filters = [
-      new GlowFilter({
-        outerStrength: 3,
-        distance: 1,
-      }),
-    ];
   }
 
   /**
@@ -148,46 +115,73 @@ export default class Play extends Scene {
     document.addEventListener('keydown', (event) => {
       if (event.code === this._config.controls.moveShieldUp) {
         this._player.shield.activateTop();
-        this._bot.shield.activateTop();
       }
 
       if (event.code === this._config.controls.shoot) {
         if (this._isPlayerTurn && !this._gameover) {
           this._player.rocket.fire();
+          if (Math.floor(random(0.5, 2))) this._enemy.shield.swap();
           this._ticker.start();
         }
       }
+
       if (event.code === this._config.controls.moveShieldDown) {
         this._player.shield.activateBottom();
-        this._bot.shield.activateBottom();
       }
     });
 
     this._player.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this._gameover = true;
-      await this._player.explode();
-      await delay(1600);
-      this.emit(Play.events.GAME_OVER, { winner: '1' });
+      this._endGame(this._player, '1');
     });
 
-    this._bot.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this._gameover = true;
-      await this._bot.explode();
-      await delay(1600);
-      this.emit(Play.events.GAME_OVER, { winner: '2' });
+    this._enemy.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
+      this._endGame(this._enemy, '2');
     });
 
     this._player.rocket.on(Rocket.events.RESET, () => {
       if (!this._gameover) {
+        this._player.toggleVehicleGlowFilter();
         this._setBotTurn();
       }
     });
 
-    this._bot.rocket.on(Rocket.events.RESET, () => {
+    this._enemy.rocket.on(Rocket.events.RESET, () => {
       if (!this._gameover) {
+        this._enemy.toggleVehicleGlowFilter();
         this._setPlayerTurn();
       }
     });
+  }
+
+  /**
+   * @private
+   */
+  async _setBotTurn() {
+    this._isPlayerTurn = false;
+    this._enemy.toggleVehicleGlowFilter();
+    await delay(3000);
+    this._enemy.rocket.fire();
+    this._ticker.start();
+    if (Math.floor(random(0.5, 2))) this._enemy.shield.swap();
+  }
+
+  /**
+   * @private
+   */
+  _setPlayerTurn() {
+    this._isPlayerTurn = true;
+    this._player.toggleVehicleGlowFilter();
+  }
+
+  /**
+   * @private
+   */
+  async _endGame(rover, winner) {
+    this._gameover = true;
+    await rover.explode();
+    this.removeChild(rover);
+    await delay(1600);
+    this.emit(Play.events.GAME_OVER, { winner });
   }
 
   /**
@@ -198,7 +192,7 @@ export default class Play extends Scene {
     const enemeyRover = enemy.vehicle.getBounds();
     const enemyShield = enemy.shield.getActiveShieldHitArea();
 
-    if (checkCollision(rocket, enemeyRover, 1.2, 1)) {
+    if (checkCollision(rocket, enemeyRover, 1.2)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
       enemy.healthBar.reduceHealth();
@@ -223,15 +217,15 @@ export default class Play extends Scene {
   _update() {
     if (this._isPlayerTurn === false) {
       if (this._rocketIsBouncedBack) {
-        this._detectInteraction(this._bot, this._bot);
+        this._detectInteraction(this._enemy, this._enemy);
       } else {
-        this._detectInteraction(this._bot, this._player);
+        this._detectInteraction(this._enemy, this._player);
       }
     } else if (this._isPlayerTurn === true) {
       if (this._rocketIsBouncedBack) {
         this._detectInteraction(this._player, this._player);
       } else {
-        this._detectInteraction(this._player, this._bot);
+        this._detectInteraction(this._player, this._enemy);
       }
     }
   }

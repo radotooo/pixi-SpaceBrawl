@@ -107,17 +107,24 @@ export default class Shield extends Container {
    * @public
    */
   activateBottom() {
-    this._activeShieldBottom.alpha = 1;
-    this._activeShieldTop.alpha = 0;
-    Assets.sounds.shieldActivate.play();
+    this._activateShield(this._activeShieldBottom, this._activeShieldTop);
   }
 
   /**
    * @public
    */
   activateTop() {
-    this._activeShieldBottom.alpha = 0;
-    this._activeShieldTop.alpha = 1;
+    this._activateShield(this._activeShieldTop, this._activeShieldBottom);
+  }
+
+  /**
+   * Active shield parts
+   * @private
+   */
+  _activateShield(shieldPart, shieldPart2) {
+    if (shieldPart.alpha === 1) return;
+    shieldPart.alpha = 1;
+    shieldPart2.alpha = 0;
     Assets.sounds.shieldActivate.play();
   }
 
