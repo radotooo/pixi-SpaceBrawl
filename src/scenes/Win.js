@@ -3,7 +3,8 @@ import Star from '../components/Win/Star';
 import Firework from '../components/Win/Firework';
 import Button from '../components/Button';
 import Title from '../components/Win/Title';
-import { delay } from '../core/utils';
+import { delay, random } from '../core/utils';
+import Assets from '../core/AssetManager';
 
 const EVENTS = {
   RESTART_GAME: 'restart_game',
@@ -20,6 +21,7 @@ export default class Win extends Scene {
      * @private
      */
     this._winner = winner;
+
     /**
      * @type {PIXI.Container}
      * @private
@@ -32,7 +34,8 @@ export default class Win extends Scene {
     this._createTitle();
     this._createButton();
     this._createEventListeners();
-    this._createFireworks();
+    this._createFireworks(5);
+    Assets.sounds.victory.play();
   }
 
   static get events() {
@@ -42,19 +45,14 @@ export default class Win extends Scene {
   /**
    * @private
    */
-  async _createFireworks() {
-    const fireWork = new Firework();
-
-    fireWork.x = -400;
-    fireWork.y = -100;
-    this.addChild(fireWork);
-
-    await delay(300);
-    const fireWork2 = new Firework();
-
-    fireWork2.x = 300;
-    fireWork2.y = -250;
-    this.addChild(fireWork2);
+  async _createFireworks(count) {
+    for (let i = 0; i < count; i++) {
+      await delay(1000);
+      const fireWork = new Firework();
+      fireWork.x = random(-500, 500);
+      fireWork.y = random(-400, 100);
+      this.addChild(fireWork);
+    }
   }
 
   /**

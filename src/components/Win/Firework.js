@@ -1,5 +1,6 @@
 import { Container, AnimatedSprite } from 'pixi.js';
 import Assets from '../../core/AssetManager';
+import { delay } from '../../core/utils';
 
 /**
  * Initializes a new instance of Slide
@@ -9,7 +10,6 @@ import Assets from '../../core/AssetManager';
 export default class Firework extends Container {
   constructor() {
     super();
-
     this._createFirework();
     this._play();
   }
@@ -24,7 +24,7 @@ export default class Firework extends Container {
 
     animation.anchor.set(0.5);
     animation.animationSpeed = 0.1;
-    animation.loop = true;
+    animation.loop = false;
     animation.scale.set(1.5);
     animation.alpha = 0;
     this._animation = animation;
@@ -35,8 +35,11 @@ export default class Firework extends Container {
    * Play animated sprite
    * @private
    */
-  _play() {
+  async _play() {
     this._animation.alpha = 1;
     this._animation.play();
+    await delay(200);
+    Assets.sounds.winFirework.play();
+    this._animation.onComplete = () => (this._animation.alpha = 0);
   }
 }

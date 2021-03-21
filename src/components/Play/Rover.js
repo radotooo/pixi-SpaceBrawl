@@ -1,10 +1,11 @@
-import { Sprite, Container } from 'pixi.js';
+import { Sprite, Container, Point } from 'pixi.js';
 import Shield from './Shield';
 import HealthBar from './HealthBar';
 import Rocket from './Rocket';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import Explosion from './Explosion';
 import { GlowFilter } from '@pixi/filter-glow';
+import Assets from '../../core/AssetManager';
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -180,6 +181,8 @@ export default class Rover extends Container {
         onComplete: () => this._hideRoverParts(),
       }
     );
+
+    Assets.sounds.roverExplosion.play();
 
     this._explosion.play();
   }

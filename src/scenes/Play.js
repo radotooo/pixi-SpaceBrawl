@@ -1,6 +1,6 @@
 import Scene from './Scene';
 import { checkCollision, delay, random } from '../core/utils';
-import { Sprite, Texture, Ticker, AnimatedSprite } from 'pixi.js';
+import { Sprite, Texture, Ticker, Point } from 'pixi.js';
 import Planet from '../components/Play/Planet';
 import Rover from '../components/Play/Rover';
 import Rocket from '../components/Play/Rocket';
@@ -8,6 +8,7 @@ import HealthBar from '../components/Play/HealthBar';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import config from '../config';
 import Assets from '../core/AssetManager';
+import { ShockwaveFilter } from '@pixi/filter-shockwave';
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -40,6 +41,36 @@ export default class Play extends Scene {
      * @private
      */
     this._rocketIsBouncedBack = false;
+
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._player = null;
+
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._enemy = null;
+
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._planet1 = null;
+
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._planet2 = null;
+
+    /**
+     * @type {PIXI.Ticker}
+     * @private
+     */
+    this._ticker = null;
   }
 
   async onCreated() {
@@ -178,6 +209,7 @@ export default class Play extends Scene {
    */
   async _endGame(rover, winner) {
     this._gameover = true;
+
     await rover.explode();
     this.removeChild(rover);
     await delay(1600);
@@ -195,6 +227,7 @@ export default class Play extends Scene {
     if (checkCollision(rocket, enemeyRover, 1.2)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
+      Assets.sounds.rocketExplosion2.play();
       enemy.healthBar.reduceHealth();
       player.rocket.resetRocket();
     }

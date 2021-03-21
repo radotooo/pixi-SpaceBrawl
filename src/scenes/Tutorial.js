@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import Scene from './Scene';
 import Slide from '../components/Tutorial/Slide';
 import IndicatorDotSet from '../components/Tutorial/IndicatorDotSet';
+import Assets from '../core/AssetManager';
 
 const EVENTS = {
   TUTORIAL_DONE: 'tutorial_done',
@@ -161,6 +162,7 @@ export default class Tutorial extends Scene {
    * @private
    */
   async _hideCurrentSlide() {
+    Assets.sounds.tutorial.play();
     this._animationIsPlaying = true;
     await gsap.to(this._slides[this._activeSlideIndex], {
       alpha: 0,

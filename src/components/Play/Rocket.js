@@ -2,6 +2,7 @@ import { Container, Sprite } from 'pixi.js';
 import gsap from 'gsap';
 import { random } from '../../core/utils';
 import Fire from './Fire';
+import Assets from '../../core/AssetManager';
 
 const EVENTS = {
   RESET: 'reset',
@@ -78,10 +79,15 @@ export default class Rocket extends Container {
     this.tl.pause();
     this.angle = 100;
 
+    Assets.sounds.bounce.play();
+    Assets.sounds.bounce.volume(0.1);
+    setTimeout(() => {
+      Assets.sounds.bounce.stop();
+    }, 700);
     await gsap.to(this, {
       x: -50,
       y: 'random(-50,50)',
-      duration: 1.5,
+      duration: 1,
     });
   }
 
@@ -97,7 +103,8 @@ export default class Rocket extends Container {
     this.tl = tl;
 
     this._animationIsPlaying = true;
-
+    Assets.sounds.rocketLaunch.play();
+    Assets.sounds.rocketLaunch.volume(0.1);
     await this.tl
       .fromTo(
         this,

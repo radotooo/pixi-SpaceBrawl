@@ -50,6 +50,8 @@ export default class Counter extends Container {
     gsap.registerPlugin(PixiPlugin);
     for (let i = this._count; i > 0; i--) {
       this._text.text = i;
+      Assets.sounds.beep.play();
+      Assets.sounds.beep.volume(0.5);
       await gsap.to(this._text, {
         pixi: {
           scaleY: 1.5,
@@ -60,6 +62,8 @@ export default class Counter extends Container {
         repeat: 1,
       });
     }
+    Assets.sounds.countdownEnd.play();
+    Assets.sounds.countdownEnd.volume(0.3);
   }
 
   /**

@@ -7,6 +7,7 @@ import { Container } from 'pixi.js';
 import Tutorial from './scenes/Tutorial';
 import fire from './static/fire.json';
 import fireworks from './static/fireworks.json';
+import rocketExplosion from './static/booom3.json';
 import booom from './static/booom.json';
 import Assets from './core/AssetManager';
 
@@ -37,9 +38,13 @@ export default class Game extends Container {
 
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
+    // Assets.sounds.mando.play();
     await this.switchScene(Tutorial, { scene: 'tutorial' });
 
     await Assets.prepareSpritesheets([{ texture: 'booom', data: booom }]);
+    await Assets.prepareSpritesheets([
+      { texture: 'rocketExplosion', data: rocketExplosion },
+    ]);
     await Assets.prepareSpritesheets([
       { texture: 'fireworks', data: fireworks },
     ]);
@@ -94,17 +99,17 @@ export default class Game extends Container {
    */
   _addEventListeners() {
     this.on(Game.events.SWITCH_SCENE, () => {
-      this.currentScene.on(Tutorial.events.TUTORIAL_DONE, async () => {
+      this.currentScene.once(Tutorial.events.TUTORIAL_DONE, async () => {
         await this.switchScene(Countdown, { scene: 'countdown' });
       });
 
-      this.currentScene.on(Countdown.events.START_GAME, async () => {
+      this.currentScene.once(Countdown.events.START_GAME, async () => {
         await this.switchScene(Play, { scene: 'play' });
       });
       this.currentScene.on(Play.events.GAME_OVER, async (data) => {
         await this.switchScene(Win, { scene: 'win' }, data);
       });
-      this.currentScene.on(
+      this.currentScene.once(
         Win.events.RESTART_GAME,
         async () => await this.switchScene(Countdown, { scene: 'countdown' })
       );
