@@ -21,6 +21,11 @@ export default class Rocket extends Container {
     super();
     this._paths = config.paths;
 
+    /**
+     * @private
+     */
+    this._animationIsPlaying = false;
+
     this._init();
   }
 
@@ -73,12 +78,32 @@ export default class Rocket extends Container {
   }
 
   /**
+   * @private
+   */
+  _setSpatial(audio) {
+    const rocketBounds = this.getBounds();
+
+    if (rocketBounds.x > window.innerWidth / 2) {
+      audio.stereo(0.9);
+    } else {
+      audio.stereo(-0.9);
+    }
+  }
+
+  playExplosionSound() {
+    console.log('inside');
+    this._setSpatial(Assets.sounds.rocketExplosion2);
+    Assets.sounds.rocketExplosion2.volume(0.3);
+    Assets.sounds.rocketExplosion2.play();
+  }
+
+  /**
    * @public
    */
   async reverse() {
     this.tl.pause();
     this.angle = 100;
-
+    this._setSpatial(Assets.sounds.bounce);
     Assets.sounds.bounce.play();
     Assets.sounds.bounce.volume(0.1);
     setTimeout(() => {
@@ -102,7 +127,10 @@ export default class Rocket extends Container {
 
     this.tl = tl;
 
+    this._setSpatial(Assets.sounds.rocketLaunch);
+
     this._animationIsPlaying = true;
+
     Assets.sounds.rocketLaunch.play();
     Assets.sounds.rocketLaunch.volume(0.1);
     await this.tl
@@ -124,7 +152,7 @@ export default class Rocket extends Container {
             useRadians: true,
           },
 
-          duration: 3,
+          duration: 2,
           ease: 'power1.in',
         }
       )

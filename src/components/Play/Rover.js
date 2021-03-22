@@ -1,4 +1,4 @@
-import { Sprite, Container, Point } from 'pixi.js';
+import { Sprite, Container } from 'pixi.js';
 import Shield from './Shield';
 import HealthBar from './HealthBar';
 import Rocket from './Rocket';
@@ -169,15 +169,17 @@ export default class Rover extends Container {
   async explode() {
     const tl = new gsap.timeline();
     await tl.fromTo(
-      this.vehicle,
+      this.vehicle.scale,
       {
-        x: '-5',
+        x: '0.9',
+        y: '0.9',
       },
       {
-        x: '+5',
-        duration: 0.04,
+        x: '1.1',
+        y: '1.1',
+        duration: 0.08,
         yoyo: true,
-        repeat: 30,
+        repeat: 10,
         onComplete: () => this._hideRoverParts(),
       }
     );

@@ -31,7 +31,7 @@ export default class Counter extends Container {
    * @private
    */
   _createText() {
-    const text = new Text('', {
+    const text = new Text(this._count, {
       fontFamily: 'Ubuntu Mono',
       fontSize: 420,
       fontWeight: 900,

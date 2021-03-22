@@ -27,6 +27,12 @@ export default class Win extends Scene {
      * @private
      */
     this._button = null;
+
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    this._sceneDone = false;
   }
 
   async onCreated() {
@@ -35,6 +41,7 @@ export default class Win extends Scene {
     this._createButton();
     this._createEventListeners();
     this._createFireworks(5);
+    Assets.sounds.victory.volume(0.5);
     Assets.sounds.victory.play();
   }
 
@@ -46,12 +53,17 @@ export default class Win extends Scene {
    * @private
    */
   async _createFireworks(count) {
+    await delay(1000);
+
     for (let i = 0; i < count; i++) {
-      await delay(1000);
+      if (this._sceneDone) return;
+
       const fireWork = new Firework();
+
       fireWork.x = random(-500, 500);
       fireWork.y = random(-400, 100);
       this.addChild(fireWork);
+      await delay(800);
     }
   }
 
@@ -59,7 +71,8 @@ export default class Win extends Scene {
    * @private
    */
   _createEventListeners() {
-    this._button.on('click', () => {
+    this._button.on('click', async () => {
+      this._sceneDone = true;
       this._button.handleClick();
       this.emit(Win.events.RESTART_GAME);
     });

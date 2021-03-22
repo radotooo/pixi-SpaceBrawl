@@ -1,14 +1,12 @@
 import Scene from './Scene';
 import { checkCollision, delay, random } from '../core/utils';
-import { Sprite, Texture, Ticker, Point } from 'pixi.js';
+import { Sprite, Texture, Ticker } from 'pixi.js';
 import Planet from '../components/Play/Planet';
 import Rover from '../components/Play/Rover';
 import Rocket from '../components/Play/Rocket';
 import HealthBar from '../components/Play/HealthBar';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import config from '../config';
-import Assets from '../core/AssetManager';
-import { ShockwaveFilter } from '@pixi/filter-shockwave';
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -162,11 +160,15 @@ export default class Play extends Scene {
     });
 
     this._player.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this._endGame(this._player, '1');
+      await this._endScene(this._player);
+      this._enemy.alpha = 0;
+      this.emit(Play.events.GAME_OVER, { winner: '1' });
     });
 
     this._enemy.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      this._endGame(this._enemy, '2');
+      await this._endScene(this._enemy);
+      this._player.alpha = 0;
+      this.emit(Play.events.GAME_OVER, { winner: '2' });
     });
 
     this._player.rocket.on(Rocket.events.RESET, () => {
@@ -207,18 +209,6 @@ export default class Play extends Scene {
   /**
    * @private
    */
-  async _endGame(rover, winner) {
-    this._gameover = true;
-
-    await rover.explode();
-    this.removeChild(rover);
-    await delay(1600);
-    this.emit(Play.events.GAME_OVER, { winner });
-  }
-
-  /**
-   * @private
-   */
   _detectInteraction(player, enemy) {
     const rocket = player.rocket.getBounds();
     const enemeyRover = enemy.vehicle.getBounds();
@@ -227,7 +217,7 @@ export default class Play extends Scene {
     if (checkCollision(rocket, enemeyRover, 1.2)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
-      Assets.sounds.rocketExplosion2.play();
+      player.rocket.playExplosionSound();
       enemy.healthBar.reduceHealth();
       player.rocket.resetRocket();
     }
@@ -261,6 +251,36 @@ export default class Play extends Scene {
         this._detectInteraction(this._player, this._enemy);
       }
     }
+  }
+
+  /**
+   * @private
+   */
+  async _shakeScene() {
+    await gsap.fromTo(
+      this,
+      {
+        x: '-8',
+        delay: 0.5,
+      },
+      {
+        x: '+8',
+        duration: 0.04,
+        yoyo: true,
+        repeat: 25,
+        ease: 'Power2.easeOut',
+      }
+    );
+  }
+
+  /**
+   * @private
+   */
+  async _endScene(rover) {
+    this._gameover = true;
+    await rover.explode();
+    await this._shakeScene();
+    this.removeChild(rover);
   }
 
   /**

@@ -2,6 +2,7 @@ import Scene from './Scene';
 import Counter from '../components/Countdown/Counter';
 import { Sprite } from 'pixi.js';
 import config from '../config';
+import { delay } from '../core/utils';
 
 const EVENTS = {
   START_GAME: 'start_game',
@@ -30,7 +31,7 @@ export default class Countdown extends Scene {
   async onCreated() {
     this._createBackground();
     this._createCounter();
-
+    await delay(300);
     await this._counter.start();
     this.emit(Countdown.events.START_GAME);
   }

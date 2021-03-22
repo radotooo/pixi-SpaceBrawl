@@ -38,7 +38,7 @@ export default class Firework extends Container {
   async _play() {
     this._animation.alpha = 1;
     this._animation.play();
-    await delay(200);
+    await delay(400);
     Assets.sounds.winFirework.play();
     this._animation.onComplete = () => (this._animation.alpha = 0);
   }
