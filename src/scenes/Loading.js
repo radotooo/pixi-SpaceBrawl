@@ -3,7 +3,6 @@ import Scene from './Scene';
 import { Sprite } from 'pixi.js';
 import { fit } from '../core/utils';
 import ProgressBar from '../components/Loading/ProgressBar';
-import Logo from '../components/Loading/Logo';
 import config from '../config';
 
 export default class Loading extends Scene {
@@ -43,7 +42,6 @@ export default class Loading extends Scene {
       roverHpBarbg: Assets.images['rover-health-bar'],
       roverHpBarFill: Assets.images['hp-bar'],
       rocket: Assets.images.rocket,
-      rocketExplosion: Assets.images.booom3,
       shieldActive: Assets.images['shield-active'],
       shieldInactive: Assets.images['shield-inactive'],
     };
@@ -54,12 +52,12 @@ export default class Loading extends Scene {
       bounce: Assets.sounds.bounce,
       rocketLaunch: Assets.sounds.rocketLaunch,
       rocketExplosion: Assets.sounds.rocketExplosion,
-      rocketExplosion2: Assets.sounds.rocketExplosion2,
       victory: Assets.sounds.victory,
       mando: Assets.sounds.mando,
       tutorial: Assets.sounds.tutorial,
       countdownEnd: Assets.sounds.countdownEnd,
       winFirework: Assets.sounds.winFirework,
+      rocketReverseHit: Assets.sounds.rocketReverseShieldHit,
     };
 
     return super.preload({ images, sounds });

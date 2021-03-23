@@ -69,6 +69,45 @@ export default class Rocket extends Container {
   /**
    * @public
    */
+  playExplosionSound() {
+    this._setSpatial(Assets.sounds.rocketExplosion);
+    Assets.sounds.rocketExplosion.volume(0.3);
+    Assets.sounds.rocketExplosion.play();
+  }
+
+  /**
+   * @public
+   */
+  playShieldHitSound() {
+    this._setSpatial(Assets.sounds.rocketReverseHit);
+    Assets.sounds.rocketReverseHit.play();
+    Assets.sounds.rocketReverseHit.volume(0.1);
+  }
+
+  /**
+   * @private
+   */
+  _playShieldBounceSound() {
+    this._setSpatial(Assets.sounds.bounce);
+    Assets.sounds.bounce.play();
+    Assets.sounds.bounce.volume(0.1);
+    setTimeout(() => {
+      Assets.sounds.bounce.stop();
+    }, 700);
+  }
+
+  /**
+   * @private
+   */
+  _playRocketLaunchSound() {
+    this._setSpatial(Assets.sounds.rocketLaunch);
+    Assets.sounds.rocketLaunch.play();
+    Assets.sounds.rocketLaunch.volume(0.1);
+  }
+
+  /**
+   * @public
+   */
   async resetRocket() {
     this.alpha = 0;
     this.tl.pause();
@@ -90,25 +129,14 @@ export default class Rocket extends Container {
     }
   }
 
-  playExplosionSound() {
-    console.log('inside');
-    this._setSpatial(Assets.sounds.rocketExplosion2);
-    Assets.sounds.rocketExplosion2.volume(0.3);
-    Assets.sounds.rocketExplosion2.play();
-  }
-
   /**
    * @public
    */
   async reverse() {
     this.tl.pause();
     this.angle = 100;
-    this._setSpatial(Assets.sounds.bounce);
-    Assets.sounds.bounce.play();
-    Assets.sounds.bounce.volume(0.1);
-    setTimeout(() => {
-      Assets.sounds.bounce.stop();
-    }, 700);
+    this._playShieldBounceSound();
+
     await gsap.to(this, {
       x: -50,
       y: 'random(-50,50)',
@@ -126,13 +154,9 @@ export default class Rocket extends Container {
     const randomPath = Math.floor(random(0, this._paths.length));
 
     this.tl = tl;
-
-    this._setSpatial(Assets.sounds.rocketLaunch);
-
     this._animationIsPlaying = true;
+    this._playRocketLaunchSound();
 
-    Assets.sounds.rocketLaunch.play();
-    Assets.sounds.rocketLaunch.volume(0.1);
     await this.tl
       .fromTo(
         this,
