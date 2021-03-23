@@ -1,11 +1,11 @@
 import { Sprite, Texture } from 'pixi.js';
 
 /**
- * Initializes a new instance of Part
+ * Initializes a new instance of ShieldPart
  * @class
  * @extends {PIXI.Sprite}
  */
-export default class Part extends Sprite {
+export default class ShieldPart extends Sprite {
   /**
    * Create Sprite object
    * @param {Object} texture The Sprite texture

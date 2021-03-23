@@ -4,6 +4,7 @@ import Bar from '../Bar';
 /**
  * Initializes a new instance of InfoBar
  * @class
+ * @extends {PIXI.Container}
  */
 export default class InfoBar extends Container {
   /**

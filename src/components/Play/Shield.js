@@ -1,12 +1,12 @@
 import { Container } from 'pixi.js';
 import HitArea from './HitArea';
-import Part from './Part';
+import ShieldPart from './ShieldPart';
 import Assets from '../../core/AssetManager';
 
 /**
  * Initializes a new instance of Shield
  * @class
- * @extends {PIXI.Containerclass}
+ * @extends {PIXI.Container}
  */
 export default class Shield extends Container {
   constructor() {
@@ -52,9 +52,17 @@ export default class Shield extends Container {
    * @private
    */
   _createInactiveShield() {
-    const bottom = new Part('shieldInactive', -0.8, -120, -20, 0.84, 0.82);
+    const bottom = new ShieldPart(
+      'shieldInactive',
+      -0.8,
+      -120,
+      -20,
+      0.84,
+      0.82
+    );
 
-    const top = new Part('shieldInactive', 0.8, -18, -120, 0.84, 0.84);
+    const top = new ShieldPart('shieldInactive', 0.8, -18, -120, 0.84, 0.84);
+
     this.addChild(bottom, top);
   }
 
@@ -62,10 +70,11 @@ export default class Shield extends Container {
    * @private
    */
   _createActiveShield() {
-    const bottom = new Part('shieldActive', -2.35, -117, -20, 0.84, 0.82);
+    const bottom = new ShieldPart('shieldActive', -2.35, -117, -20, 0.84, 0.82);
+
     this._activeShieldBottom = bottom;
 
-    const top = new Part('shieldActive', -0.8, -18, -120, 0.84, 0.84, 0);
+    const top = new ShieldPart('shieldActive', -0.8, -18, -120, 0.84, 0.84, 0);
 
     this._activeShieldTop = top;
     this.addChild(this._activeShieldTop, this._activeShieldBottom);
@@ -125,7 +134,22 @@ export default class Shield extends Container {
     if (shieldPart.alpha === 1) return;
     shieldPart.alpha = 1;
     shieldPart2.alpha = 0;
+    this._setSpatial(Assets.sounds.shieldActivate);
     Assets.sounds.shieldActivate.play();
+  }
+
+  /**
+   * Set howler stereo property based on shield bounds
+   * @private
+   */
+  _setSpatial(audio) {
+    const shielBounds = this.getBounds();
+
+    if (shielBounds.x > window.innerWidth / 2) {
+      audio.stereo(0.9);
+    } else {
+      audio.stereo(-0.9);
+    }
   }
 
   /**

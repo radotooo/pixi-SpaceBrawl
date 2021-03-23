@@ -7,7 +7,6 @@ import { Container } from 'pixi.js';
 import Tutorial from './scenes/Tutorial';
 import fire from './static/fire.json';
 import fireworks from './static/fireworks.json';
-import rocketExplosion from './static/booom3.json';
 import booom from './static/booom.json';
 import Assets from './core/AssetManager';
 
@@ -38,13 +37,10 @@ export default class Game extends Container {
 
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
-    // Assets.sounds.mando.play();
     await this.switchScene(Tutorial, { scene: 'tutorial' });
+    // Assets.sounds.mando.play();
 
     await Assets.prepareSpritesheets([{ texture: 'booom', data: booom }]);
-    await Assets.prepareSpritesheets([
-      { texture: 'rocketExplosion', data: rocketExplosion },
-    ]);
     await Assets.prepareSpritesheets([
       { texture: 'fireworks', data: fireworks },
     ]);
@@ -79,7 +75,7 @@ export default class Game extends Container {
   async _fadeIn() {
     await gsap.to(this.currentScene, {
       alpha: 1,
-      duration: 0.1,
+      duration: 0.3,
     });
   }
 
@@ -90,7 +86,7 @@ export default class Game extends Container {
   async _fadeOut() {
     await gsap.to(this.currentScene, {
       alpha: 0,
-      duration: 0.2,
+      duration: 0.3,
     });
   }
 

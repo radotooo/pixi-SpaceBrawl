@@ -1,10 +1,9 @@
 import { Sprite, Container } from 'pixi.js';
 import Shield from './Shield';
-import HealthBar from './HealthBar';
+import Vehicle from './Vehicle';
 import Rocket from './Rocket';
 import gsap, { MotionPathPlugin } from 'gsap/all';
 import Explosion from './Explosion';
-import { GlowFilter } from '@pixi/filter-glow';
 import Assets from '../../core/AssetManager';
 
 gsap.registerPlugin(MotionPathPlugin);
@@ -41,12 +40,6 @@ export default class Rover extends Container {
      * @type {PIXI.Container}
      * @public
      */
-    this.healthBar = null;
-
-    /**
-     * @type {PIXI.Container}
-     * @public
-     */
     this.rocket = null;
 
     /**
@@ -62,48 +55,22 @@ export default class Rover extends Container {
    * @private
    */
   _init() {
-    this._createHealthBar();
     this._createRoverVehicle();
     this._createRoverShadow();
     this._createRocket();
     this._createShied();
     this._createExplosion();
-  }
-
-  /**
-   * @public
-   */
-  toggleVehicleGlowFilter() {
-    if (this.vehicle.filters.length === 0) {
-      this.vehicle.filters = [
-        new GlowFilter({
-          outerStrength: 3,
-          distance: 1,
-        }),
-      ];
-    } else {
-      this.vehicle.filters = [];
-    }
-  }
-
-  /**
-   * @private
-   */
-  _createHealthBar() {
-    const healthBar = new HealthBar();
-    this.healthBar = healthBar;
+    this._addListeners();
   }
 
   /**
    * @private
    */
   _createRoverVehicle() {
-    const rover = new Sprite.from('rover');
-    this.vehicle = rover;
-    this.vehicle.filters = [];
-    rover.anchor.set(0.5);
-    this.vehicle.addChild(this.healthBar);
-    this.addChild(rover);
+    const vehicle = new Vehicle();
+
+    this.vehicle = vehicle;
+    this.addChild(this.vehicle);
   }
 
   /**
@@ -158,7 +125,6 @@ export default class Rover extends Container {
   _hideRoverParts() {
     this.vehicle.alpha = 0;
     this.shield.alpha = 0;
-    this.healthBar.alpha = 0;
     this._shadow.alpha = 0;
   }
 
@@ -187,5 +153,14 @@ export default class Rover extends Container {
     Assets.sounds.roverExplosion.play();
 
     this._explosion.play();
+  }
+
+  /**
+   * @private
+   */
+  _addListeners() {
+    this.rocket.on(Rocket.events.RESET, () => {
+      this.vehicle.toggleVehicleGlowFilter();
+    });
   }
 }

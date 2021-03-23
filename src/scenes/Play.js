@@ -69,6 +69,12 @@ export default class Play extends Scene {
      * @private
      */
     this._ticker = null;
+
+    /**
+     * @type {Function}
+     * @private
+     */
+    this._keyEvent = null;
   }
 
   async onCreated() {
@@ -79,7 +85,7 @@ export default class Play extends Scene {
     this._addPlayerToPlanet(this._enemy, this._planet2, 40, 280, 180);
     this._addEventListeners();
     this._createTicker();
-    this._setBotTurn();
+    this._setEnemyTurn();
   }
 
   static get events() {
@@ -141,31 +147,21 @@ export default class Play extends Scene {
    * @private
    */
   _addEventListeners() {
-    document.addEventListener('keydown', (event) => {
-      if (event.code === this._config.controls.moveShieldUp) {
-        this._player.shield.activateTop();
+    document.addEventListener(
+      'keydown',
+      (this._keyEvent = (event) => this._handleKeydown(event))
+    );
+
+    this._player.vehicle.healthBar.once(
+      HealthBar.events.NO_HEALTH,
+      async () => {
+        await this._endScene(this._player);
+        this._enemy.alpha = 0;
+        this.emit(Play.events.GAME_OVER, { winner: '1' });
       }
+    );
 
-      if (event.code === this._config.controls.shoot) {
-        if (this._isPlayerTurn && !this._gameover) {
-          this._player.rocket.fire();
-          if (Math.floor(random(0.5, 2))) this._enemy.shield.swap();
-          this._ticker.start();
-        }
-      }
-
-      if (event.code === this._config.controls.moveShieldDown) {
-        this._player.shield.activateBottom();
-      }
-    });
-
-    this._player.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
-      await this._endScene(this._player);
-      this._enemy.alpha = 0;
-      this.emit(Play.events.GAME_OVER, { winner: '1' });
-    });
-
-    this._enemy.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
+    this._enemy.vehicle.healthBar.once(HealthBar.events.NO_HEALTH, async () => {
       await this._endScene(this._enemy);
       this._player.alpha = 0;
       this.emit(Play.events.GAME_OVER, { winner: '2' });
@@ -173,14 +169,12 @@ export default class Play extends Scene {
 
     this._player.rocket.on(Rocket.events.RESET, () => {
       if (!this._gameover) {
-        this._player.toggleVehicleGlowFilter();
-        this._setBotTurn();
+        this._setEnemyTurn();
       }
     });
 
     this._enemy.rocket.on(Rocket.events.RESET, () => {
       if (!this._gameover) {
-        this._enemy.toggleVehicleGlowFilter();
         this._setPlayerTurn();
       }
     });
@@ -189,13 +183,41 @@ export default class Play extends Scene {
   /**
    * @private
    */
-  async _setBotTurn() {
+  _handleKeydown(event) {
+    if (event.code === this._config.controls.moveShieldUp) {
+      this._player.shield.activateTop();
+    }
+
+    if (event.code === this._config.controls.shoot) {
+      if (this._isPlayerTurn && !this._gameover) {
+        this._player.rocket.fire();
+        this._randomShieldActivation(this._enemy);
+        this._ticker.start();
+      }
+    }
+
+    if (event.code === this._config.controls.moveShieldDown) {
+      this._player.shield.activateBottom();
+    }
+  }
+
+  /**
+   * @private
+   */
+  _randomShieldActivation(rover) {
+    if (Math.floor(random(0.5, 2))) rover.shield.swap();
+  }
+
+  /**
+   * @private
+   */
+  async _setEnemyTurn() {
     this._isPlayerTurn = false;
-    this._enemy.toggleVehicleGlowFilter();
-    await delay(3000);
+    this._enemy.vehicle.toggleVehicleGlowFilter();
+    await delay(2000);
+    this._randomShieldActivation(this._enemy);
     this._enemy.rocket.fire();
     this._ticker.start();
-    if (Math.floor(random(0.5, 2))) this._enemy.shield.swap();
   }
 
   /**
@@ -203,7 +225,7 @@ export default class Play extends Scene {
    */
   _setPlayerTurn() {
     this._isPlayerTurn = true;
-    this._player.toggleVehicleGlowFilter();
+    this._player.vehicle.toggleVehicleGlowFilter();
   }
 
   /**
@@ -214,11 +236,11 @@ export default class Play extends Scene {
     const enemeyRover = enemy.vehicle.getBounds();
     const enemyShield = enemy.shield.getActiveShieldHitArea();
 
-    if (checkCollision(rocket, enemeyRover, 1.2)) {
+    if (checkCollision(rocket, enemeyRover, 1.3)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
       player.rocket.playExplosionSound();
-      enemy.healthBar.reduceHealth();
+      enemy.vehicle.healthBar.reduceHealth();
       player.rocket.resetRocket();
     }
 
@@ -226,6 +248,7 @@ export default class Play extends Scene {
       if (this._rocketIsBouncedBack) {
         this._ticker.stop();
         this._rocketIsBouncedBack = false;
+        player.rocket.playShieldHitSound();
         player.rocket.resetRocket();
       } else {
         this._rocketIsBouncedBack = true;
@@ -239,17 +262,20 @@ export default class Play extends Scene {
    */
   _update() {
     if (this._isPlayerTurn === false) {
-      if (this._rocketIsBouncedBack) {
-        this._detectInteraction(this._enemy, this._enemy);
-      } else {
-        this._detectInteraction(this._enemy, this._player);
-      }
+      this._interact(this._enemy, this._player);
     } else if (this._isPlayerTurn === true) {
-      if (this._rocketIsBouncedBack) {
-        this._detectInteraction(this._player, this._player);
-      } else {
-        this._detectInteraction(this._player, this._enemy);
-      }
+      this._interact(this._player, this._enemy);
+    }
+  }
+
+  /**
+   * @private
+   */
+  _interact(rover, enemy) {
+    if (this._rocketIsBouncedBack) {
+      this._detectInteraction(rover, rover);
+    } else {
+      this._detectInteraction(rover, enemy);
     }
   }
 
@@ -280,6 +306,7 @@ export default class Play extends Scene {
     this._gameover = true;
     await rover.explode();
     await this._shakeScene();
+    document.removeEventListener('keydown', this._keyEvent);
     this.removeChild(rover);
   }
 
