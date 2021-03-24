@@ -3,7 +3,7 @@ import Star from '../components/Win/Star';
 import Firework from '../components/Win/Firework';
 import Button from '../components/Button';
 import Title from '../components/Win/Title';
-import { delay, random } from '../core/utils';
+import { delay, random, resizeScene } from '../core/utils';
 import Assets from '../core/AssetManager';
 
 const EVENTS = {
@@ -16,10 +16,6 @@ export default class Win extends Scene {
    */
   constructor({ winner }) {
     super();
-    /**
-     * @type {String}
-     * @private
-     */
     this._winner = winner;
 
     /**
@@ -39,10 +35,10 @@ export default class Win extends Scene {
     this._createStars();
     this._createTitle();
     this._createButton();
-    this._createEventListeners();
     this._createFireworks(5);
-    Assets.sounds.victory.volume(0.5);
-    Assets.sounds.victory.play();
+    this._playVictorySound();
+    this._addEventListeners();
+    resizeScene(this, window.innerWidth - 200);
   }
 
   static get events() {
@@ -52,30 +48,13 @@ export default class Win extends Scene {
   /**
    * @private
    */
-  async _createFireworks(count) {
-    await delay(1000);
+  _createStars() {
+    const star = new Star(-540, -360, 0.65, 35);
+    const star1 = new Star(418, -375, 0.35, 40);
+    const star2 = new Star(660, -70, 0.35, 20);
+    const star3 = new Star(-850, -65, 0.3, 35);
 
-    for (let i = 0; i < count; i++) {
-      if (this._sceneDone) return;
-
-      const fireWork = new Firework();
-
-      fireWork.x = random(-500, 500);
-      fireWork.y = random(-400, 100);
-      this.addChild(fireWork);
-      await delay(800);
-    }
-  }
-
-  /**
-   * @private
-   */
-  _createEventListeners() {
-    this._button.on('click', async () => {
-      this._sceneDone = true;
-      this._button.handleClick();
-      this.emit(Win.events.RESTART_GAME);
-    });
+    this.addChild(star, star1, star2, star3);
   }
 
   /**
@@ -102,14 +81,41 @@ export default class Win extends Scene {
   }
 
   /**
+   * @param {Number} count Fireworks count
    * @private
    */
-  _createStars() {
-    const star = new Star(-540, -360, 0.65, 35);
-    const star1 = new Star(418, -375, 0.35, 40);
-    const star2 = new Star(660, -70, 0.35, 20);
-    const star3 = new Star(-850, -65, 0.3, 35);
-    this.addChild(star, star1, star2, star3);
+  async _createFireworks(count) {
+    await delay(1000);
+
+    for (let i = 0; i < count; i++) {
+      if (this._sceneDone) return;
+
+      const fireWork = new Firework();
+
+      fireWork.x = random(-500, 500);
+      fireWork.y = random(-400, 100);
+      this.addChild(fireWork);
+      await delay(800);
+    }
+  }
+
+  /**
+   * @private
+   */
+  _playVictorySound() {
+    Assets.sounds.victory.volume(0.5);
+    Assets.sounds.victory.play();
+  }
+
+  /**
+   * @private
+   */
+  _addEventListeners() {
+    this._button.on('click', async () => {
+      this._sceneDone = true;
+      this._button.handleClick();
+      this.emit(Win.events.RESTART_GAME);
+    });
   }
 
   /**
@@ -120,10 +126,6 @@ export default class Win extends Scene {
    * @param  {Number} height Window height
    */
   onResize(width, height) {
-    // fit(this.background, { width, height });
-    // fit(this.star, { width, height });
-    // eslint-disable-line no-unused-vars
-    // this.width = width;
-    // this.height = height;
+    resizeScene(this, width - 200);
   }
 }

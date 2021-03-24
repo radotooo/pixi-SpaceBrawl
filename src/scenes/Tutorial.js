@@ -1,11 +1,11 @@
 import gsap from 'gsap/all';
-import { filters } from 'pixi.js';
 import config from '../config';
 import Button from '../components/Button';
 import Scene from './Scene';
 import Slide from '../components/Tutorial/Slide';
 import IndicatorDotSet from '../components/Tutorial/IndicatorDotSet';
 import Assets from '../core/AssetManager';
+import { resizeScene } from '../core/utils';
 
 const EVENTS = {
   TUTORIAL_DONE: 'tutorial_done',
@@ -19,26 +19,31 @@ export default class Tutorial extends Scene {
      * @private
      */
     this._name = 'tutorial';
+
     /**
      * @type {Object}
      * @private
      */
     this._config = config.scenes.Tutorial;
+
     /**
      * @type {Array}
      * @private
      */
     this._slides = [];
+
     /**
      * @type {Number}
      * @private
      */
     this._activeSlideIndex = 0;
+
     /**
      * @type {Boolean}
      * @private
      */
     this._animationIsPlaying = false;
+
     /**
      * @type {Boolean}
      * @private
@@ -54,7 +59,8 @@ export default class Tutorial extends Scene {
     this._createSlides();
     this._createIndicatorDots();
     this._createButton();
-    this._addListeners();
+    this._addEventListeners();
+    resizeScene(this, window.innerWidth);
   }
 
   /**
@@ -119,21 +125,9 @@ export default class Tutorial extends Scene {
   }
 
   /**
-   * Set background blur effect
    * @private
    */
-  _setBackgroundBlur() {
-    const blurFilter = new filters.BlurFilter();
-
-    blurFilter.blur = 70;
-    blurFilter.quality = 8;
-    this.background.filters = [blurFilter];
-  }
-
-  /**
-   * @private
-   */
-  _addListeners() {
+  _addEventListeners() {
     this._button.on('click', async () => {
       this._button.handleClick();
       if (this._animationIsPlaying) return;
@@ -190,5 +184,7 @@ export default class Tutorial extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
-  onResize(width, height) {}
+  onResize(width, height) {
+    resizeScene(this, width);
+  }
 }

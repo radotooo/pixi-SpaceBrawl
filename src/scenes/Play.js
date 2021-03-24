@@ -1,5 +1,5 @@
 import Scene from './Scene';
-import { checkCollision, delay, random } from '../core/utils';
+import { checkCollision, delay, random, resizeScene } from '../core/utils';
 import { Sprite, Texture, Ticker } from 'pixi.js';
 import Planet from '../components/Play/Planet';
 import Rover from '../components/Play/Rover';
@@ -84,6 +84,7 @@ export default class Play extends Scene {
     this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
     this._addPlayerToPlanet(this._enemy, this._planet2, 40, 280, 180);
     this._addEventListeners();
+    resizeScene(this, window.innerWidth);
     this._createTicker();
     this._setEnemyTurn();
   }
@@ -97,6 +98,7 @@ export default class Play extends Scene {
    */
   _createBackground() {
     const background = new Sprite.from('playBg');
+
     background.anchor.set(0.5);
     this.addChild(background);
   }
@@ -135,6 +137,15 @@ export default class Play extends Scene {
     planet.addChild(player);
   }
 
+  /**
+   * @
+   * @private
+   */
+  _resizeStage(width) {
+    const ratio = width / 1920;
+
+    this.scale.set(ratio);
+  }
   /**
    * @private
    */
@@ -236,7 +247,7 @@ export default class Play extends Scene {
     const enemeyRover = enemy.vehicle.getBounds();
     const enemyShield = enemy.shield.getActiveShieldHitArea();
 
-    if (checkCollision(rocket, enemeyRover, 1.3)) {
+    if (checkCollision(rocket, enemeyRover)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
       player.rocket.playExplosionSound();
@@ -318,8 +329,6 @@ export default class Play extends Scene {
    * @param  {Number} height Window height
    */
   onResize(width, height) {
-    // eslint-disable-line no-unused-vars
-    // this.width = width;
-    // this.height = height;
+    resizeScene(this, width);
   }
 }
