@@ -6,7 +6,7 @@ Space Brawl is a relatively simple turn-based game. The goal of the game is to d
 
 You can change controls and some basic settings in config.js.
 
-For best experiece use aspect ratio 16:9 and resolution 1920 x 1080 or less.
+For best experiece use 1920 x 1080 or less resolution with aspect ratio 16:9.
 
 Build with:
 
