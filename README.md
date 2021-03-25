@@ -2,7 +2,7 @@
 
 ![](src/assets/preview.gif)
 
-Space Brawl is a relatively simple turn-based game. The goal of the game is to destroy the enemy`s rover before it destroys the player`s.
+Space Brawl is a relatively simple turn-based game. The goal of the game is to destroy the enemy\`s rover before it destroys the player\`s.
 
 You can change controls and some basic settings in config.js.
 
