@@ -10,6 +10,12 @@ import { delay } from '../../core/utils';
 export default class Firework extends Container {
   constructor() {
     super();
+    /**
+     * @type {PIXi.AnimatedSprite}
+     * @private
+     */
+    this._animation = null;
+
     this._createFirework();
     this._play();
   }
@@ -27,6 +33,7 @@ export default class Firework extends Container {
     animation.loop = false;
     animation.scale.set(1.5);
     animation.alpha = 0;
+
     this._animation = animation;
     this.addChild(this._animation);
   }

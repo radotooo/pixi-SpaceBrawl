@@ -22,19 +22,26 @@ export default class Button extends Container {
     interactive = false
   ) {
     super();
+    this._text = buttonText;
+    this._width = width;
+    this._height = height;
+
+    this.buttonMode = buttonMode;
+    this.interactive = interactive;
+
     /**
      * @type {String}
      * @private
      */
     this._name = 'button';
-    this._height = height;
-    this._width = width;
-    this._text = buttonText;
+
+    /**
+     * @type {PIXI.Graphics}
+     * @private
+     */
+    this._button = null;
 
     this._init();
-
-    this.buttonMode = buttonMode;
-    this.interactive = interactive;
   }
 
   /**
@@ -43,8 +50,6 @@ export default class Button extends Container {
   _init() {
     this._createBackground();
     this._createText();
-    this._button.addChild(this._buttonText);
-    this.addChild(this._button);
   }
 
   /**
@@ -56,7 +61,9 @@ export default class Button extends Container {
     button.beginFill(0xffffff);
     button.drawRoundedRect(0, 0, this._width, this._height, this._height);
     button.endFill();
+
     this._button = button;
+    this.addChild(this._button);
   }
 
   /**
@@ -72,7 +79,8 @@ export default class Button extends Container {
     buttonText.anchor.set(0.5);
     buttonText.x = this._width / 2;
     buttonText.y = this._height / 2;
-    this._buttonText = buttonText;
+
+    this._button.addChild(buttonText);
   }
 
   /**

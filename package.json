@@ -30,10 +30,7 @@
   "dependencies": {
     "@pixi/filter-color-overlay": "^4.0.0",
     "@pixi/filter-glow": "^4.0.0",
-    "@pixi/filter-godray": "^4.0.0",
-    "@pixi/filter-outline": "^4.0.0",
-    "@pixi/filter-shockwave": "^4.0.0",
-    "@pixi/filter-simple-lightmap": "^4.0.0",
+    "@pixi/filter-kawase-blur": "^4.0.0",
     "eslint": "^6.8.0",
     "gsap": "^3.6.0",
     "howler": "^2.1.3",

@@ -69,24 +69,24 @@ export default class Game extends Container {
   }
 
   /**
-   * Add fade in on scene enter
-   * @private
-   */
-  async _fadeIn() {
-    await gsap.to(this.currentScene, {
-      alpha: 1,
-      duration: 0.3,
-    });
-  }
-
-  /**
    * Add fade out on scene leave
    * @private
    */
   async _fadeOut() {
     await gsap.to(this.currentScene, {
       alpha: 0,
-      duration: 0.3,
+      duration: 0.2,
+    });
+  }
+
+  /**
+   * Add fade in on scene enter
+   * @private
+   */
+  async _fadeIn() {
+    await gsap.to(this.currentScene, {
+      alpha: 1,
+      duration: 0.2,
     });
   }
 

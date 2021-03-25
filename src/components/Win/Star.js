@@ -27,6 +27,20 @@ export default class Star extends Sprite {
   }
 
   /**
+   * Add rotation effect to star on mouse movement
+   * @private
+   */
+  _addRotationEffect() {
+    window.addEventListener('mousemove', ({ movementY }) => {
+      gsap.set(this, {
+        pixi: {
+          angle: movementY <= 0 ? `-=random(1,3)` : '+=random(1,3)',
+        },
+      });
+    });
+  }
+
+  /**
    * Add flaot effect to star
    * @private
    */
@@ -39,20 +53,6 @@ export default class Star extends Sprite {
       duration: 'random(1,2)',
       ease: 'power1.inOut',
       onComplete: () => this._float(),
-    });
-  }
-
-  /**
-   * Add rotation effect to star on mouse movement
-   * @private
-   */
-  _addRotationEffect() {
-    window.addEventListener('mousemove', ({ movementY }) => {
-      gsap.set(this, {
-        pixi: {
-          angle: movementY <= 0 ? `-=random(1,3)` : '+=random(1,3)',
-        },
-      });
     });
   }
 }

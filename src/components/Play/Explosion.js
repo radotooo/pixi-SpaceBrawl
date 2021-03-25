@@ -9,33 +9,40 @@ import Assets from './../../core/AssetManager';
 export default class Explosion extends Container {
   constructor() {
     super();
+    /**
+     * @type {PIXI.AnimatedSprite}
+     * @private
+     */
+    this._animation = null;
 
-    this._init();
+    this._createExplosion();
   }
 
   /**
    * @private
    */
-  _init() {
+  _createExplosion() {
     const animation = new AnimatedSprite(
       Assets.spritesheets.booom.animations.booom
     );
+
     animation.anchor.set(0.5);
     animation.animationSpeed = 0.1;
     animation.loop = false;
     animation.scale.set(1.5);
-    this.animation = animation;
-    this.animation.alpha = 0;
-    this.addChild(this.animation);
+
+    this._animation = animation;
+    this._animation.alpha = 0;
+    this.addChild(this._animation);
   }
 
   /**
-   * Play animated sprite
+   * Play explosion animation
    * @public
    */
   play() {
-    this.animation.alpha = 1;
-    this.animation.play();
-    this.animation.onComplete = () => (this.animation.alpha = 0);
+    this._animation.alpha = 1;
+    this._animation.play();
+    this._animation.onComplete = () => (this._animation.alpha = 0);
   }
 }

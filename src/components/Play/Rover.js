@@ -19,9 +19,6 @@ export default class Rover extends Container {
    */
   constructor(config) {
     super();
-    /**
-     * @private
-     */
     this._config = config;
 
     /**
@@ -43,10 +40,22 @@ export default class Rover extends Container {
     this.rocket = null;
 
     /**
+     * @type {PIXI.Sprite}
+     * @public
+     */
+    this._shadow = null;
+
+    /**
      * @type {Boolean}
      * @private
      */
     this._animationIsPlaying = false;
+
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._explosion = null;
 
     this._init();
   }
@@ -60,7 +69,7 @@ export default class Rover extends Container {
     this._createRocket();
     this._createShied();
     this._createExplosion();
-    this._addListeners();
+    this._addEventListeners();
   }
 
   /**
@@ -78,8 +87,10 @@ export default class Rover extends Container {
    */
   _createRoverShadow() {
     const shadow = new Sprite.from('roverShadow');
+
     shadow.anchor.set(0.5);
     shadow.y = 80;
+
     this._shadow = shadow;
     this.addChild(this._shadow);
   }
@@ -95,6 +106,7 @@ export default class Rover extends Container {
     rocket.x = -150;
     rocket.y = -30;
     rocket.alpha = 0;
+
     this.rocket = rocket;
     this.addChild(this.rocket);
   }
@@ -104,6 +116,7 @@ export default class Rover extends Container {
    */
   _createShied() {
     const shield = new Shield();
+
     this.shield = shield;
     this.addChild(this.shield);
   }
@@ -113,19 +126,12 @@ export default class Rover extends Container {
    */
   _createExplosion() {
     const explosion = new Explosion();
+
     explosion.x = -10;
     explosion.y = -65;
+
     this._explosion = explosion;
     this.addChild(this._explosion);
-  }
-
-  /**
-   * @private
-   */
-  _hideRoverParts() {
-    this.vehicle.alpha = 0;
-    this.shield.alpha = 0;
-    this._shadow.alpha = 0;
   }
 
   /**
@@ -134,6 +140,7 @@ export default class Rover extends Container {
    */
   async explode() {
     const tl = new gsap.timeline();
+
     await tl.fromTo(
       this.vehicle.scale,
       {
@@ -158,7 +165,16 @@ export default class Rover extends Container {
   /**
    * @private
    */
-  _addListeners() {
+  _hideRoverParts() {
+    this.vehicle.alpha = 0;
+    this.shield.alpha = 0;
+    this._shadow.alpha = 0;
+  }
+
+  /**
+   * @private
+   */
+  _addEventListeners() {
     this.rocket.on(Rocket.events.RESET, () => {
       this.vehicle.toggleVehicleGlowFilter();
     });

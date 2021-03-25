@@ -31,8 +31,8 @@ export default class Planet extends Sprite {
    */
   _float() {
     gsap.to(this, {
-      x: '+=random(-10,10)',
-      y: '+=random(-10,10)',
+      x: '+=random(-8,8)',
+      y: '+=random(-8,8)',
       yoyo: true,
       repeat: 1,
       duration: 'random(1,2)',

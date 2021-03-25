@@ -60,7 +60,7 @@ export default class Tutorial extends Scene {
     this._createIndicatorDots();
     this._createButton();
     this._addEventListeners();
-    resizeScene(this, window.innerWidth);
+    resizeScene(this);
   }
 
   /**
@@ -93,8 +93,23 @@ export default class Tutorial extends Scene {
       'keyLong',
       'Press the "Space" key to shoot'
     );
+
     this.addChild(arrowUp, arrowDown, space);
     this._slides.push(arrowUp, arrowDown, space);
+  }
+
+  /**
+   * @private
+   */
+  _createIndicatorDots() {
+    const indicatorDotSet = new IndicatorDotSet(this._slides.length, 20);
+
+    indicatorDotSet.pivot.x = indicatorDotSet.width / 2;
+    indicatorDotSet.pivot.y = indicatorDotSet.height / 2;
+    indicatorDotSet.y = 120;
+
+    this._indicatorDotSet = indicatorDotSet;
+    this.addChild(this._indicatorDotSet);
   }
 
   /**
@@ -109,19 +124,6 @@ export default class Tutorial extends Scene {
 
     this._button = button;
     this.addChild(button);
-  }
-
-  /**
-   * @private
-   */
-  _createIndicatorDots() {
-    const indicatorDotSet = new IndicatorDotSet(this._slides.length, 20);
-
-    indicatorDotSet.pivot.x = indicatorDotSet.width / 2;
-    indicatorDotSet.pivot.y = indicatorDotSet.height / 2;
-    indicatorDotSet.y = 120;
-    this._indicatorDotSet = indicatorDotSet;
-    this.addChild(this._indicatorDotSet);
   }
 
   /**
@@ -158,10 +160,12 @@ export default class Tutorial extends Scene {
   async _hideCurrentSlide() {
     Assets.sounds.tutorial.play();
     this._animationIsPlaying = true;
+
     await gsap.to(this._slides[this._activeSlideIndex], {
       alpha: 0,
       duration: 0.1,
     });
+
     this._animationIsPlaying = false;
   }
 
@@ -170,10 +174,12 @@ export default class Tutorial extends Scene {
    */
   async _showNextSlide() {
     this._animationIsPlaying = true;
+
     await gsap.to(this._slides[this._activeSlideIndex], {
       alpha: 1,
       duration: 0.1,
     });
+
     this._animationIsPlaying = false;
   }
 
@@ -184,7 +190,8 @@ export default class Tutorial extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
+  // eslint-disable-next-line no-unused-vars
   onResize(width, height) {
-    resizeScene(this, width);
+    resizeScene(this);
   }
 }

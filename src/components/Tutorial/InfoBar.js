@@ -17,10 +17,12 @@ export default class InfoBar extends Container {
     this._initaltext = text;
     this._width = width;
     this._height = height;
+
     /**
      * @type {PIXI.Container}
      */
     this._bar = null;
+
     /**
      * @type {PIXI.Text}
      */
@@ -34,7 +36,7 @@ export default class InfoBar extends Container {
    */
   _init() {
     this._createBar();
-    this.addChild(this._bar);
+    this._addText();
   }
 
   /**
@@ -44,6 +46,13 @@ export default class InfoBar extends Container {
     const bar = new Bar(this._width, this._height);
 
     this._bar = bar;
+    this.addChild(this._bar);
+  }
+
+  /**
+   * @private
+   */
+  _addText() {
     const text = new Text('', {
       fill: '0xffffff',
       fontFamily: 'Ubuntu',
@@ -54,6 +63,7 @@ export default class InfoBar extends Container {
     text.anchor.set(0.5);
     text.x = this._bar.width / 2;
     text.y = this._bar.height / 2;
+
     this._text = text;
     this._bar.addChild(this._text);
   }
@@ -61,6 +71,7 @@ export default class InfoBar extends Container {
   /**
    * Set bar text value
    * @param {String} text
+   * @public
    */
   setText(text) {
     this._text.text = text;

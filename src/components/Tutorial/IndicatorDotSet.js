@@ -18,10 +18,46 @@ export default class IndicatorDotSet extends Container {
     this._y = y;
     this._count = count;
     this._gap = gap;
+
+    /**
+     * @type {Array}
+     * @private
+     */
     this._dots = [];
+
+    /**
+     * @type {Number}
+     * @private
+     */
     this._activeDotIndex = 0;
 
     this._createDotSet(this._count, this._gap);
+  }
+
+  /**
+   * Create dots set and based on dotIndex value make according dot active(set color white)
+   * @param {Number} count The dont to number of dots to be created
+   * @param {Number} gap The gap between dots
+   */
+  _createDotSet(count, gap) {
+    const temp = this._x;
+
+    for (let i = 0; i <= count - 1; i++) {
+      if (i > 0) this._x += gap;
+      const dot = new Graphics();
+
+      if (i === this._activeDotIndex) {
+        dot.beginFill(0xfffffff);
+      } else {
+        dot.beginFill(0x000000, 0.3);
+      }
+      dot.drawCircle(this._x, this._y, 6);
+      dot.endFill();
+
+      this._dots[i] = dot;
+      this.addChild(dot);
+    }
+    this._x = temp;
   }
 
   /**
@@ -51,30 +87,5 @@ export default class IndicatorDotSet extends Container {
     if (this._dots.length > 0) {
       this._dots.forEach((c) => c.destroy());
     }
-  }
-
-  /**
-   * Create dots set and based on dotIndex value make according dot active(set color white)
-   * @param {Number} count The dont to number of dots to be created
-   * @param {Number} gap The gap between dots
-   */
-  _createDotSet(count, gap) {
-    const temp = this._x;
-
-    for (let i = 0; i <= count - 1; i++) {
-      if (i > 0) this._x += gap;
-      const dot = new Graphics();
-
-      if (i === this._activeDotIndex) {
-        dot.beginFill(0xfffffff);
-      } else {
-        dot.beginFill(0x000000, 0.3);
-      }
-      dot.drawCircle(this._x, this._y, 6);
-      dot.endFill();
-      this._dots[i] = dot;
-      this.addChild(dot);
-    }
-    this._x = temp;
   }
 }

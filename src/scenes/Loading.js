@@ -1,21 +1,30 @@
 import Assets from '../core/AssetManager';
 import Scene from './Scene';
 import { Sprite } from 'pixi.js';
-import { fit } from '../core/utils';
+import { resizeScene } from '../core/utils';
 import ProgressBar from '../components/Loading/ProgressBar';
 import config from '../config';
 
 export default class Loading extends Scene {
   constructor() {
     super();
+    /**
+     * @type {Object}
+     * @private
+     */
+    this._config = config.scenes.Loading;
 
-    this.config = config.scenes.Splash;
+    /**
+     * @type {PIXI.Container}
+     * @private
+     */
+    this._progressBar = null;
 
     this._init();
   }
 
   get finish() {
-    return new Promise((res) => setTimeout(res, this.config.hideDelay));
+    return new Promise((res) => setTimeout(res, this._config.hideDelay));
   }
 
   preload() {
@@ -45,6 +54,7 @@ export default class Loading extends Scene {
       shieldActive: Assets.images['shield-active'],
       shieldInactive: Assets.images['shield-inactive'],
     };
+
     const sounds = {
       shieldActivate: Assets.sounds.shieldActivate,
       beep: Assets.sounds.beep,
@@ -63,8 +73,9 @@ export default class Loading extends Scene {
     return super.preload({ images, sounds });
   }
 
+  // eslint-disable-next-line no-unused-vars
   onResize(width, height) {
-    fit(this, { width, height });
+    resizeScene(this);
   }
 
   onLoadProgress(val) {
@@ -77,6 +88,7 @@ export default class Loading extends Scene {
   _init() {
     this._createProgressBar();
     this._createLogo();
+    resizeScene(this);
   }
 
   /**
@@ -87,6 +99,7 @@ export default class Loading extends Scene {
 
     progressBar.y = 15;
     progressBar.x = this.width / 2 - progressBar.width / 2;
+
     this._progressBar = progressBar;
     this.addChild(this._progressBar);
   }
@@ -96,9 +109,10 @@ export default class Loading extends Scene {
    */
   _createLogo() {
     const logo = new Sprite.from(Assets.images.ooo);
+
     logo.y = -70;
     logo.anchor.set(0.5);
-    this._logo = logo;
-    this.addChild(this._logo);
+
+    this.addChild(logo);
   }
 }

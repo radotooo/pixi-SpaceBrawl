@@ -12,8 +12,8 @@ export default class Bar extends Container {
    */
   constructor(width, height) {
     super();
-    this.barWidth = width;
-    this.barHeight = height;
+    this._barWidth = width;
+    this._barHeight = height;
 
     this._createBar();
   }
@@ -28,12 +28,12 @@ export default class Bar extends Container {
     bar.drawRoundedRect(
       0,
       0,
-      this.barWidth,
-      this.barHeight,
-      this.barHeight / 2 - 1
+      this._barWidth,
+      this._barHeight,
+      this._barHeight / 2 - 1
     );
     bar.endFill();
-    this._bar = bar;
-    this.addChild(this._bar);
+
+    this.addChild(bar);
   }
 }

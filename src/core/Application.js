@@ -2,7 +2,7 @@ import { Sprite, Application } from 'pixi.js';
 import config from '../config';
 import Game from '../Game';
 import { Viewport } from 'pixi-viewport';
-import { center } from './utils';
+import { center, fit } from './utils';
 import Assets from './AssetManager';
 
 /**
@@ -78,8 +78,11 @@ export default class GameApplication extends Application {
    * @param  {Number} height        The updated viewport width
    */
   onResize(width = this.config.view.width, height = this.config.view.height) {
-    this.background.x = width / 2;
-    this.background.y = height / 2;
+    if (this.background) {
+      this.background.x = width / 2;
+      this.background.y = height / 2;
+      fit(this.background, width, height, true, true);
+    }
     this.game.onResize(width, height);
 
     if (this.config.view.centerOnResize) {

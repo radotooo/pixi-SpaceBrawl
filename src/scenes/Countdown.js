@@ -33,7 +33,7 @@ export default class Countdown extends Scene {
   async onCreated() {
     this._createBackground();
     this._createCounter();
-    resizeScene(this, window.innerWidth);
+    resizeScene(this);
     await delay(300);
     await this._counter.start();
     this.emit(Countdown.events.START_GAME);
@@ -72,7 +72,7 @@ export default class Countdown extends Scene {
    */
   onResize(width, height) {
     fit(this.background, width, height);
-    resizeScene(this, width);
+    resizeScene(this);
     // eslint-disable-line no-unused-vars
   }
 }

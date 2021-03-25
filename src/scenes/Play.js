@@ -84,8 +84,9 @@ export default class Play extends Scene {
     this._addPlayerToPlanet(this._player, this._planet1, -65, -400);
     this._addPlayerToPlanet(this._enemy, this._planet2, 40, 280, 180);
     this._addEventListeners();
-    resizeScene(this, window.innerWidth);
+    resizeScene(this);
     this._createTicker();
+    await delay(1000);
     this._setEnemyTurn();
   }
 
@@ -111,6 +112,7 @@ export default class Play extends Scene {
     const planet2 = new Planet(Texture.from('planet2'), -730, -440);
     const planet3 = new Planet(Texture.from('planet3'), -880, 415);
     const planet4 = new Planet(Texture.from('planet4'), 945, -625);
+
     this._planet1 = planet1;
     this._planet2 = planet2;
     this.addChild(planet1, planet2, planet3, planet4);
@@ -121,9 +123,11 @@ export default class Play extends Scene {
    */
   _createPlayers() {
     const player = new Rover(this._config.rover);
+
     this._player = player;
 
     const bot = new Rover(this._config.rover);
+
     this._enemy = bot;
   }
 
@@ -137,15 +141,6 @@ export default class Play extends Scene {
     planet.addChild(player);
   }
 
-  /**
-   * @
-   * @private
-   */
-  _resizeStage(width) {
-    const ratio = width / 1920;
-
-    this.scale.set(ratio);
-  }
   /**
    * @private
    */
@@ -202,7 +197,6 @@ export default class Play extends Scene {
     if (event.code === this._config.controls.shoot) {
       if (this._isPlayerTurn && !this._gameover) {
         this._player.rocket.fire();
-        this._randomShieldActivation(this._enemy);
         this._ticker.start();
       }
     }
@@ -216,7 +210,7 @@ export default class Play extends Scene {
    * @private
    */
   _randomShieldActivation(rover) {
-    if (Math.floor(random(0.5, 2))) rover.shield.swap();
+    if (Math.floor(random(0.6, 2))) rover.shield.swap();
   }
 
   /**
@@ -237,6 +231,7 @@ export default class Play extends Scene {
   _setPlayerTurn() {
     this._isPlayerTurn = true;
     this._player.vehicle.toggleVehicleGlowFilter();
+    this._randomShieldActivation(this._enemy);
   }
 
   /**
@@ -328,7 +323,8 @@ export default class Play extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
+  // eslint-disable-next-line no-unused-vars
   onResize(width, height) {
-    resizeScene(this, width);
+    resizeScene(this);
   }
 }

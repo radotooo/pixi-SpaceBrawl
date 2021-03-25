@@ -3,6 +3,7 @@ import { Container, Sprite } from 'pixi.js';
 /**
  * Initializes a new instance of Logo
  * @class
+ * @extends {PIXI.Container}
  */
 export default class Logo extends Container {
   /**
@@ -19,8 +20,8 @@ export default class Logo extends Container {
    */
   _createLogo(texture) {
     const logo = new Sprite.from(texture);
+
     logo.anchor.set(0.5);
-    this._logo = logo;
-    this.addChild(this._logo);
+    this.addChild(logo);
   }
 }

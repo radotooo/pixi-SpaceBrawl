@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /**
  * @desc fits display object, by altering its scale, into passed width and height
  * @param {PIXI.DisplayObject} element
@@ -9,7 +10,8 @@
  */
 export function fit(
   element,
-  { width, height },
+  width,
+  height,
   ignoreRatio = false,
   overscale = false
 ) {
@@ -69,6 +71,7 @@ export function checkCollision(
   el1Height = 1.5
 ) {
   return (
+    // eslint-disable-next-line operator-linebreak
     el1.x + el1.width / el1Width > el2.x &&
     el1.x < el2.x + el2.width / el2Width &&
     el1.y + el1.height / el1Height > el2.y &&
@@ -86,4 +89,30 @@ export function delay(ms) {
       resolve();
     }, ms);
   });
+}
+
+/**
+ * Change stage scale based on window width
+ * @param {PIXI.Container} scene
+ * @param {Number} width Window width
+ */
+export function resizeScene(scene) {
+  const ratio = window.innerWidth / 1920;
+
+  if (ratio < 0.1) return;
+  scene.scale.set(ratio);
+}
+
+/**
+ * Set howler stereo property based on element bounds
+ * @private
+ */
+export function setSpatial(audio, element) {
+  const shielBounds = element.getBounds();
+
+  if (shielBounds.x > window.innerWidth / 2) {
+    audio.stereo(0.9);
+  } else {
+    audio.stereo(-0.9);
+  }
 }

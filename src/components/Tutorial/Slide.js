@@ -49,16 +49,6 @@ export default class Slide extends Container {
   /**
    * @private
    */
-  _setFocus() {
-    this.alpha = 0;
-    if (this._onFocus) {
-      this.alpha = 1;
-    }
-  }
-
-  /**
-   * @private
-   */
   _createKeyImg() {
     const key = new Sprite.from(this._texture);
 
@@ -83,9 +73,21 @@ export default class Slide extends Container {
    */
   _createInfoBar() {
     const bar = new InfoBar(450, 50);
+
     bar.x = -220;
     bar.y = 20;
+
     bar.setText(this._barDescription);
     this.addChild(bar);
+  }
+
+  /**
+   * @private
+   */
+  _setFocus() {
+    this.alpha = 0;
+    if (this._onFocus) {
+      this.alpha = 1;
+    }
   }
 }

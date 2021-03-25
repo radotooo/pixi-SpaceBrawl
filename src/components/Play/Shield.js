@@ -1,4 +1,5 @@
 import { Container } from 'pixi.js';
+import { setSpatial } from '../../core/utils';
 import HitArea from './HitArea';
 import ShieldPart from './ShieldPart';
 import Assets from '../../core/AssetManager';
@@ -12,25 +13,25 @@ export default class Shield extends Container {
   constructor() {
     super();
     /**
-     *@type {PIXI.Sprite}
+     * @type {PIXI.Sprite}
      * @public
      */
     this._activeShieldTop = null;
 
     /**
-     *@type {PIXI.Sprite}
+     * @type {PIXI.Sprite}
      * @public
      */
     this._activeShieldBottom = null;
 
     /**
-     *@type {PIXI.Graphics}
+     * @type {PIXI.Graphics}
      * @public
      */
     this._bottomHitArea = null;
 
     /**
-     *@type {PIXI.Graphics}
+     * @type {PIXI.Graphics}
      * @public
      */
     this._topHitArea = null;
@@ -73,7 +74,6 @@ export default class Shield extends Container {
     const bottom = new ShieldPart('shieldActive', -2.35, -117, -20, 0.84, 0.82);
 
     this._activeShieldBottom = bottom;
-
     const top = new ShieldPart('shieldActive', -0.8, -18, -120, 0.84, 0.84, 0);
 
     this._activeShieldTop = top;
@@ -113,6 +113,7 @@ export default class Shield extends Container {
   }
 
   /**
+   * Activate bottom shield
    * @public
    */
   activateBottom() {
@@ -120,6 +121,7 @@ export default class Shield extends Container {
   }
 
   /**
+   * Activate top shield
    * @public
    */
   activateTop() {
@@ -132,24 +134,19 @@ export default class Shield extends Container {
    */
   _activateShield(shieldPart, shieldPart2) {
     if (shieldPart.alpha === 1) return;
+
     shieldPart.alpha = 1;
     shieldPart2.alpha = 0;
-    this._setSpatial(Assets.sounds.shieldActivate);
-    Assets.sounds.shieldActivate.play();
+
+    this._playActivateShieldSound();
   }
 
   /**
-   * Set howler stereo property based on shield bounds
    * @private
    */
-  _setSpatial(audio) {
-    const shielBounds = this.getBounds();
-
-    if (shielBounds.x > window.innerWidth / 2) {
-      audio.stereo(0.9);
-    } else {
-      audio.stereo(-0.9);
-    }
+  _playActivateShieldSound() {
+    setSpatial(Assets.sounds.shieldActivate, this);
+    Assets.sounds.shieldActivate.play();
   }
 
   /**

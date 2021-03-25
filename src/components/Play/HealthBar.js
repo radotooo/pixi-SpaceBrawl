@@ -45,26 +45,27 @@ export default class HealthBar extends Container {
   /**
    * @private
    */
-  _createHealthBar() {
-    const hpBar = new Sprite.from('roverHpBarFill');
-    hpBar.y = -81.5;
-    hpBar.x = -69.5;
-    this._hpBar = hpBar;
-
-    this.addChild(this._hpBar);
-  }
-
-  /**
-   * @private
-   */
   _createBackground() {
     const hpBackground = new Sprite.from('roverHpBarbg');
 
     hpBackground.y = -75;
     hpBackground.x = -10;
     hpBackground.anchor.set(0.5);
-    this.hpBackground = hpBackground;
+
     this.addChild(hpBackground);
+  }
+
+  /**
+   * @private
+   */
+  _createHealthBar() {
+    const hpBar = new Sprite.from('roverHpBarFill');
+
+    hpBar.y = -81.5;
+    hpBar.x = -69.5;
+
+    this._hpBar = hpBar;
+    this.addChild(this._hpBar);
   }
 
   /**
@@ -83,7 +84,7 @@ export default class HealthBar extends Container {
     if (this._hpBar.width < this._hpLossOnHit * 3) {
       this._animateLowHp();
     }
-    if (this._hpBar.width < 1) {
+    if (this._hpBar.width < 100) {
       this.emit(HealthBar.events.NO_HEALTH);
     }
   }

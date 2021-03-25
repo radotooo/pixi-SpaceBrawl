@@ -14,6 +14,7 @@ export default class ProgressBar extends Container {
      * @type {PIXI.Graphics}
      */
     this._bar = null;
+
     /**
      * @private
      * @type {PIXI.Graphics}
@@ -39,11 +40,13 @@ export default class ProgressBar extends Container {
   fillProgressBar(val) {
     this._progressBar.clear();
     const progressBar = new Graphics();
+
     progressBar.beginFill(0xffffff);
     progressBar.drawRoundedRect(0, 0, 541 * (val / 100), 40, 32);
     progressBar.endFill();
     progressBar.x = 7;
     progressBar.y = 7;
+
     this._progressBar = progressBar;
     this._bar.addChild(this._progressBar);
   }

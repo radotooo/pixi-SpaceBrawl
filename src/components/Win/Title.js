@@ -31,8 +31,10 @@ export default class Title extends Container {
     const winner = new Sprite.from(this._texture);
 
     winner.x = this._texture === '1' ? -90 : 0;
-    winner.y = -235;
+    winner.y = -205;
+    winner.scale.set(0.8);
     winner.anchor.set(0.5);
+
     this.addChild(winner);
   }
 
@@ -44,6 +46,7 @@ export default class Title extends Container {
 
     text.y = 155;
     text.anchor.set(0.5);
+
     this.addChild(text);
   }
 }

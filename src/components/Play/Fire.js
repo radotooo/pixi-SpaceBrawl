@@ -27,12 +27,12 @@ export default class Fire extends Container {
 
     fire.blendMode = BLEND_MODES.ADD;
     fire.anchor.set(0.5);
+
     this._fire = fire;
     this.addChild(this._fire);
   }
 
   /**
-   * Play animated sprite
    * @private
    */
   _play() {

@@ -38,7 +38,7 @@ export default class Win extends Scene {
     this._createFireworks(5);
     this._playVictorySound();
     this._addEventListeners();
-    resizeScene(this, window.innerWidth - 200);
+    resizeScene(this);
   }
 
   static get events() {
@@ -49,10 +49,10 @@ export default class Win extends Scene {
    * @private
    */
   _createStars() {
-    const star = new Star(-540, -360, 0.65, 35);
-    const star1 = new Star(418, -375, 0.35, 40);
-    const star2 = new Star(660, -70, 0.35, 20);
-    const star3 = new Star(-850, -65, 0.3, 35);
+    const star = new Star(-540, -340, 0.65, 35);
+    const star1 = new Star(418, -355, 0.35, 40);
+    const star2 = new Star(660, -50, 0.35, 20);
+    const star3 = new Star(-850, -45, 0.3, 35);
 
     this.addChild(star, star1, star2, star3);
   }
@@ -125,7 +125,8 @@ export default class Win extends Scene {
    * @param  {Number} width  Window width
    * @param  {Number} height Window height
    */
+  // eslint-disable-next-line no-unused-vars
   onResize(width, height) {
-    resizeScene(this, width - 200);
+    resizeScene(this);
   }
 }

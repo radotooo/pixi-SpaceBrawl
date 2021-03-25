@@ -1,6 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
 import gsap from 'gsap';
-import { random } from '../../core/utils';
+import { random, setSpatial } from '../../core/utils';
 import Fire from './Fire';
 import Assets from '../../core/AssetManager';
 
@@ -63,6 +63,7 @@ export default class Rocket extends Container {
     fire.scale.x = 0.2;
     fire.scale.y = 0.15;
     fire.zIndex = -1;
+
     this.addChild(fire);
   }
 
@@ -70,7 +71,7 @@ export default class Rocket extends Container {
    * @public
    */
   playExplosionSound() {
-    this._setSpatial(Assets.sounds.rocketExplosion);
+    setSpatial(Assets.sounds.rocketExplosion, this);
     Assets.sounds.rocketExplosion.volume(0.3);
     Assets.sounds.rocketExplosion.play();
   }
@@ -79,7 +80,7 @@ export default class Rocket extends Container {
    * @public
    */
   playShieldHitSound() {
-    this._setSpatial(Assets.sounds.rocketReverseHit);
+    setSpatial(Assets.sounds.rocketReverseHit, this);
     Assets.sounds.rocketReverseHit.play();
     Assets.sounds.rocketReverseHit.volume(0.1);
   }
@@ -88,7 +89,7 @@ export default class Rocket extends Container {
    * @private
    */
   _playShieldBounceSound() {
-    this._setSpatial(Assets.sounds.bounce);
+    setSpatial(Assets.sounds.bounce, this);
     Assets.sounds.bounce.play();
     Assets.sounds.bounce.volume(0.1);
     setTimeout(() => {
@@ -100,36 +101,13 @@ export default class Rocket extends Container {
    * @private
    */
   _playRocketLaunchSound() {
-    this._setSpatial(Assets.sounds.rocketLaunch);
+    setSpatial(Assets.sounds.rocketLaunch, this);
     Assets.sounds.rocketLaunch.play();
     Assets.sounds.rocketLaunch.volume(0.1);
   }
 
   /**
-   * @public
-   */
-  async resetRocket() {
-    this.alpha = 0;
-    this.tl.pause();
-    this._animationIsPlaying = false;
-
-    this.emit(Rocket.events.RESET);
-  }
-
-  /**
-   * @private
-   */
-  _setSpatial(audio) {
-    const rocketBounds = this.getBounds();
-
-    if (rocketBounds.x > window.innerWidth / 2) {
-      audio.stereo(0.9);
-    } else {
-      audio.stereo(-0.9);
-    }
-  }
-
-  /**
+   * Send rocket back to sender
    * @public
    */
   async reverse() {
@@ -145,6 +123,19 @@ export default class Rocket extends Container {
   }
 
   /**
+   * Set rocket in starting position
+   * @public
+   */
+  async resetRocket() {
+    this.alpha = 0;
+    this.tl.pause();
+    this._animationIsPlaying = false;
+
+    this.emit(Rocket.events.RESET);
+  }
+
+  /**
+   * Firing a rocket
    * @public
    */
   async fire() {
