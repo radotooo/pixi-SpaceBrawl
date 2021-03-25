@@ -1,7 +1,7 @@
 /* eslint-disable */
 /// <reference types="cypress" />
 
-describe('Blog Spot', () => {
+describe('Space Brawl', () => {
   beforeEach(() => {
     cy.visit('http://localhost:8080/');
   });

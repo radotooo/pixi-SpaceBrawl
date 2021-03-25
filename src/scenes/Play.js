@@ -242,7 +242,7 @@ export default class Play extends Scene {
     const enemeyRover = enemy.vehicle.getBounds();
     const enemyShield = enemy.shield.getActiveShieldHitArea();
 
-    if (checkCollision(rocket, enemeyRover)) {
+    if (checkCollision(rocket, enemeyRover, 1.2)) {
       this._rocketIsBouncedBack = false;
       this._ticker.stop();
       player.rocket.playExplosionSound();

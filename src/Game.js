@@ -38,7 +38,6 @@ export default class Game extends Container {
     await this.switchScene(Loading, { scene: 'loading' });
     await this.currentScene.finish;
     await this.switchScene(Tutorial, { scene: 'tutorial' });
-    // Assets.sounds.mando.play();
 
     await Assets.prepareSpritesheets([{ texture: 'booom', data: booom }]);
     await Assets.prepareSpritesheets([

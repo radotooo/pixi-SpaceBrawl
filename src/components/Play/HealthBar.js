@@ -21,6 +21,12 @@ export default class HealthBar extends Container {
     this._hpBar = null;
 
     /**
+     * @type {PIXI.Sprite}
+     * @private
+     */
+    this._hpBackgrond = null;
+
+    /**
      * @type {Number}
      * @private
      */
@@ -52,6 +58,7 @@ export default class HealthBar extends Container {
     hpBackground.x = -10;
     hpBackground.anchor.set(0.5);
 
+    this._hpBackground = hpBackground;
     this.addChild(hpBackground);
   }
 
@@ -84,7 +91,7 @@ export default class HealthBar extends Container {
     if (this._hpBar.width < this._hpLossOnHit * 3) {
       this._animateLowHp();
     }
-    if (this._hpBar.width < 100) {
+    if (this._hpBar.width < 1) {
       this.emit(HealthBar.events.NO_HEALTH);
     }
   }
@@ -93,7 +100,7 @@ export default class HealthBar extends Container {
    * @private
    */
   _animateLowHp() {
-    this.hpBackground.filters = [new ColorOverlayFilter(0xff0000)];
+    this._hpBackground.filters = [new ColorOverlayFilter(0xff0000)];
     this._hpBar.filters = [new ColorOverlayFilter(0xff0000)];
 
     gsap.fromTo(
