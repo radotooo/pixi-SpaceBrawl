@@ -9,6 +9,10 @@ import fire from './static/fire.json';
 import fireworks from './static/fireworks.json';
 import booom from './static/booom.json';
 import Assets from './core/AssetManager';
+import { PixiPlugin } from 'gsap/PixiPlugin';
+
+// register the plugin
+gsap.registerPlugin(PixiPlugin);
 
 /**
  * Main game stage, manages scenes/levels.

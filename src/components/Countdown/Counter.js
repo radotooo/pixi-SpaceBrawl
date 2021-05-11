@@ -1,7 +1,6 @@
 import { Container, Sprite, Text } from 'pixi.js';
 import Assets from '../../core/AssetManager';
-import PixiPlugin from 'gsap/PixiPlugin';
-import gsap from 'gsap/all';
+import gsap from 'gsap';
 
 /**
  * Initializes a new instance of Counter
@@ -47,7 +46,6 @@ export default class Counter extends Container {
    * @public
    */
   async start() {
-    gsap.registerPlugin(PixiPlugin);
     for (let i = this._count; i > 0; i--) {
       this._text.text = i;
       Assets.sounds.beep.play();
